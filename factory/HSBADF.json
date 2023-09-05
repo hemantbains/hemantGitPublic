@@ -1,0 +1,9 @@
+{
+	"name": "HSBADF",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "31abebe4-4109-430d-b64f-181d3ffef72c",
+		"tenantId": "57773785-6353-4c12-865c-37658a7cabac"
+	}
+}
