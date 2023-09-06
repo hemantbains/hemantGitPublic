@@ -1,0 +1,24 @@
+{
+	"name": "AzureSqlTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkSvc_AzureSQLDB",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"Pm_Sink_Tablename": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": {
+				"value": "@dataset().Pm_Sink_Tablename",
+				"type": "Expression"
+			}
+		}
+	}
+}
