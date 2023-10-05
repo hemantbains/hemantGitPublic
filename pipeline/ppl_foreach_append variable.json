@@ -9,7 +9,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@variables('countrynames')",
+						"value": "@pipeline().parameters.paraCountryNames",
 						"type": "Expression"
 					},
 					"isSequential": true,
@@ -29,16 +29,48 @@
 						}
 					]
 				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "countrynames2",
+					"value": {
+						"value": "@variables('countrynames')",
+						"type": "Expression"
+					}
+				}
 			}
 		],
-		"variables": {
-			"countrynames": {
-				"type": "Array",
+		"parameters": {
+			"paraCountryNames": {
+				"type": "array",
 				"defaultValue": [
 					"India",
 					"US",
 					"UK"
 				]
+			}
+		},
+		"variables": {
+			"countrynames": {
+				"type": "Array"
+			},
+			"countrynames2": {
+				"type": "Array"
 			}
 		},
 		"annotations": []
