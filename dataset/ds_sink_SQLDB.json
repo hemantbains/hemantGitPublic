@@ -1,0 +1,17 @@
+{
+	"name": "ds_sink_SQLDB",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureSqlDatabase01",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "checkSpecificFiles"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
