@@ -1,0 +1,24 @@
+{
+	"name": "ds_sink_AzureSqldb_foreachtable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureSqlDatabase01",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"parasinktablename": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": {
+				"value": "@dataset().parasinktablename",
+				"type": "Expression"
+			}
+		}
+	}
+}
