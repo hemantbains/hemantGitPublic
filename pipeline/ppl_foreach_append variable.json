@@ -1,0 +1,34 @@
+{
+	"name": "ppl_foreach_append variable",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"activities": [
+						{
+							"name": "Append variable1",
+							"type": "AppendVariable",
+							"dependsOn": [],
+							"userProperties": []
+						}
+					]
+				}
+			}
+		],
+		"variables": {
+			"countrynames": {
+				"type": "Array",
+				"defaultValue": [
+					"India",
+					"US",
+					"UK"
+				]
+			}
+		},
+		"annotations": []
+	}
+}
