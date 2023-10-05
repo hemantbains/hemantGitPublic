@@ -1,0 +1,35 @@
+{
+	"name": "ppl_Set_Variable",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "",
+					"value": ""
+				}
+			}
+		],
+		"variables": {
+			"x": {
+				"type": "String",
+				"defaultValue": "hemant"
+			},
+			"y": {
+				"type": "Integer",
+				"defaultValue": 2000
+			},
+			"mydatevar": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
