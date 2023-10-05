@@ -30,7 +30,7 @@
 						"referenceName": "ds_Source_Blob_khsb_input_cont_lookup",
 						"type": "DatasetReference"
 					},
-					"firstRowOnly": true
+					"firstRowOnly": false
 				}
 			}
 		],
