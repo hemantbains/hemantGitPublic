@@ -1,5 +1,5 @@
 {
-	"name": "pplCopyDataSpecificFiles_SQLDB_copy1",
+	"name": "pplCopyDataSpecificFiles_SQLDB",
 	"properties": {
 		"activities": [
 			{
@@ -27,20 +27,53 @@
 						}
 					},
 					"sink": {
-						"type": "DelimitedTextSink",
-						"storeSettings": {
-							"type": "AzureBlobStorageWriteSettings",
-							"copyBehavior": "MergeFiles"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".txt"
-						}
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": true,
+						"tableOption": "autoCreate",
+						"disableMetricsCollection": false
 					},
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Returned",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Returned",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Order ID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Order ID",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Region",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Region",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							}
+						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,
@@ -56,7 +89,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_sink_blob_khsboutputcont",
+						"referenceName": "ds_sink_SQLDB",
 						"type": "DatasetReference"
 					}
 				]
