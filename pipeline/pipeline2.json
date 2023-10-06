@@ -75,7 +75,7 @@
 		],
 		"variables": {
 			"x": {
-				"type": "Array"
+				"type": "String"
 			}
 		},
 		"annotations": []
