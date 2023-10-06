@@ -47,7 +47,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Lookup1').output.value",
+						"value": "@activity('Lookup1').output",
 						"type": "Expression"
 					},
 					"isSequential": true,
@@ -65,7 +65,30 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"storedProcedureName": "[dbo].[pplinsertgss01]"
+								"storedProcedureName": "[dbo].[pplinsertgss01]",
+								"storedProcedureParameters": {
+									"orderid": {
+										"value": {
+											"value": "@item().OrderID",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"reg": {
+										"value": {
+											"value": "@item().Region",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"ret": {
+										"value": {
+											"value": "@item().Returned",
+											"type": "Expression"
+										},
+										"type": "String"
+									}
+								}
 							},
 							"linkedServiceName": {
 								"referenceName": "LS_AzureSqlDatabase01",
