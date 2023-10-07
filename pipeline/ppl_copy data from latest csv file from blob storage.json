@@ -45,7 +45,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Get Metadata1 blob folder').output.childItems",
+						"value": "@activity('Get Metadata chilitems').output.childItems",
 						"type": "Expression"
 					},
 					"isSequential": true,
