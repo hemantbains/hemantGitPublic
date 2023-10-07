@@ -19,7 +19,7 @@
 					"value": "@dataset().childitemname",
 					"type": "Expression"
 				},
-				"container": "khsb-input-cont"
+				"container": "khsb-input-cont-all"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
