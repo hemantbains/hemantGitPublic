@@ -33,17 +33,6 @@
 				}
 			}
 		],
-		"parameters": {
-			"prev_date": {
-				"type": "string"
-			},
-			"this_file_date": {
-				"type": "string"
-			},
-			"file_name": {
-				"type": "string"
-			}
-		},
 		"annotations": []
 	}
 }
