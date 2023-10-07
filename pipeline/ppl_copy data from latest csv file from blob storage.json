@@ -51,7 +51,7 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Get Metadata last modified",
+							"name": "Get Metadata chilitems",
 							"type": "GetMetadata",
 							"dependsOn": [],
 							"policy": {
@@ -64,8 +64,14 @@
 							"userProperties": [],
 							"typeProperties": {
 								"dataset": {
-									"referenceName": "blob_input_folder",
-									"type": "DatasetReference"
+									"referenceName": "dsChildItems",
+									"type": "DatasetReference",
+									"parameters": {
+										"child_item_filename": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
 								},
 								"fieldList": [
 									"itemName",

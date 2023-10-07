@@ -1,0 +1,40 @@
+{
+	"name": "dsChildItems",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureBlobStorage01",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"child_item_filename": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "khsb-input-cont"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Returned",
+				"type": "String"
+			},
+			{
+				"name": "Order_ID",
+				"type": "String"
+			},
+			{
+				"name": "Region",
+				"type": "String"
+			}
+		]
+	}
+}
