@@ -45,13 +45,13 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Get Metadata chilitems').output.childItems",
+						"value": "@activity('Get Metadata1 blob folder').output.childItems",
 						"type": "Expression"
 					},
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Get Metadata chilitems",
+							"name": "Get Metadata1",
 							"type": "GetMetadata",
 							"dependsOn": [],
 							"policy": {
@@ -64,17 +64,16 @@
 							"userProperties": [],
 							"typeProperties": {
 								"dataset": {
-									"referenceName": "dsChildItems",
+									"referenceName": "dschilditem",
 									"type": "DatasetReference",
 									"parameters": {
-										"child_item_filename": {
+										"childitemname": {
 											"value": "@item().name",
 											"type": "Expression"
 										}
 									}
 								},
 								"fieldList": [
-									"itemName",
 									"lastModified"
 								],
 								"storeSettings": {

@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"container": "khsb-input-cont"
+				"container": "khsb-input-cont-all"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
