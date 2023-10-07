@@ -15,6 +15,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().child_item_filename",
+					"type": "Expression"
+				},
 				"container": "khsb-input-cont"
 			},
 			"columnDelimiter": ",",
