@@ -1,0 +1,96 @@
+{
+	"name": "ds_ath_adls_input_csv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_ath_adls_input",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "2022-23/Lesson_Assessments/ELA/Grade_K/Sec_1",
+				"fileSystem": "ath-input"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Item ID",
+				"type": "String"
+			},
+			{
+				"name": "Item Name",
+				"type": "String"
+			},
+			{
+				"name": "Question ID",
+				"type": "String"
+			},
+			{
+				"name": "Associated Question ID",
+				"type": "String"
+			},
+			{
+				"name": "Total Points",
+				"type": "String"
+			},
+			{
+				"name": "Question Type",
+				"type": "String"
+			},
+			{
+				"name": "Question",
+				"type": "String"
+			},
+			{
+				"name": "Position Number",
+				"type": "String"
+			},
+			{
+				"name": "Sub-Question",
+				"type": "String"
+			},
+			{
+				"name": "Answer Option",
+				"type": "String"
+			},
+			{
+				"name": "Answer Breakdown10",
+				"type": "String"
+			},
+			{
+				"name": "Answer Breakdown11",
+				"type": "String"
+			},
+			{
+				"name": "Correct Answer",
+				"type": "String"
+			},
+			{
+				"name": "Correctly Answered",
+				"type": "String"
+			},
+			{
+				"name": "Most Points Earned",
+				"type": "String"
+			},
+			{
+				"name": "Least Points Earned",
+				"type": "String"
+			},
+			{
+				"name": "Average Points Earned",
+				"type": "String"
+			},
+			{
+				"name": "Standards",
+				"type": "String"
+			}
+		]
+	}
+}
