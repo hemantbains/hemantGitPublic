@@ -2,7 +2,7 @@
 	"name": "ds_sink_SQLDB",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "LS_AzureSqlDatabase01",
+			"referenceName": "ls_Azure_SQLDB_Ath",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
@@ -10,7 +10,7 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "latestyearfile"
+			"table": "Questions"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
