@@ -2,7 +2,7 @@
 	"name": "ds_adlsg2_input_csv",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "myADLSG2_conn",
+			"referenceName": "LS_Ath_ADLSG2_Input",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
@@ -19,7 +19,7 @@
 					"value": "@dataset().adlsg2_input_filename",
 					"type": "Expression"
 				},
-				"folderPath": "2022-23/Lesson_Assessments/ELA/Grade_K/Sec_1",
+				"folderPath": "2022-23/Lesson_Assessments/ELA/Grade_K/Sec1",
 				"fileSystem": "ath-input"
 			},
 			"columnDelimiter": ",",

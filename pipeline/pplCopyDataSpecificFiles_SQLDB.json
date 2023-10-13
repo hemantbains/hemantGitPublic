@@ -98,7 +98,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_sink_SQLDB",
+						"referenceName": "ds_Ath_sink_SQLDB",
 						"type": "DatasetReference"
 					}
 				]

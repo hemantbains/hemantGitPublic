@@ -1,5 +1,5 @@
 {
-	"name": "pipeline3",
+	"name": "Ath_Schoology",
 	"properties": {
 		"activities": [
 			{
@@ -24,6 +24,7 @@
 					],
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
@@ -70,6 +71,8 @@
 						{
 							"name": "Switch1",
 							"type": "Switch",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
 									"activity": "Set variable3",
@@ -243,7 +246,7 @@
 															},
 															{
 																"source": {
-																	"name": "Answer Breakdown10",
+																	"name": "Answer Breakdown1",
 																	"type": "String",
 																	"physicalType": "String"
 																},
@@ -255,7 +258,7 @@
 															},
 															{
 																"source": {
-																	"name": "Answer Breakdown11",
+																	"name": "Answer Breakdown2",
 																	"type": "String",
 																	"physicalType": "String"
 																},
@@ -347,10 +350,10 @@
 												},
 												"inputs": [
 													{
-														"referenceName": "ds_adlsg2_input_csv",
+														"referenceName": "ds_ath_adls_input_csv",
 														"type": "DatasetReference",
 														"parameters": {
-															"adlsg2_input_filename": {
+															"ath_adls2_input_filename": {
 																"value": "@variables('x')",
 																"type": "Expression"
 															}
@@ -359,7 +362,7 @@
 												],
 												"outputs": [
 													{
-														"referenceName": "ds_sink_SQLDB",
+														"referenceName": "ds_Ath_sink_SQLDB",
 														"type": "DatasetReference"
 													}
 												]
