@@ -1,5 +1,5 @@
 {
-	"name": "ds_sink_SQLDB",
+	"name": "ds_Ath_sink_SQLDB",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_Azure_SQLDB_Ath",
