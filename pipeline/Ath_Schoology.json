@@ -70,8 +70,6 @@
 						{
 							"name": "Switch1",
 							"type": "Switch",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
 									"activity": "Set variable3",
