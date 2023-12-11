@@ -83,7 +83,26 @@
 								"expression": {
 									"value": "@contains(variables('x'),'.')",
 									"type": "Expression"
-								}
+								},
+								"ifTrueActivities": [
+									{
+										"name": "vartrue",
+										"type": "SetVariable",
+										"dependsOn": [],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "a",
+											"value": {
+												"value": "@variables('x')",
+												"type": "Expression"
+											}
+										}
+									}
+								]
 							}
 						}
 					]
@@ -93,6 +112,9 @@
 		"variables": {
 			"x": {
 				"type": "String"
+			},
+			"a": {
+				"type": "Array"
 			}
 		},
 		"annotations": []
