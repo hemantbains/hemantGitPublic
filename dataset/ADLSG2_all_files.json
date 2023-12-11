@@ -5,6 +5,11 @@
 			"referenceName": "adlsg2_edls",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"excel_File": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
