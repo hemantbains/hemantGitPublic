@@ -81,7 +81,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"expression": {
-									"value": "@contains(variables('x'),'.')",
+									"value": "@equals(variables('x'),'AAOTA')",
 									"type": "Expression"
 								},
 								"ifFalseActivities": [
@@ -96,16 +96,15 @@
 										"userProperties": [],
 										"typeProperties": {
 											"variableName": "b",
-											"value": {
-												"value": "@variables('x')",
-												"type": "Expression"
-											}
+											"value": [
+												"'No'"
+											]
 										}
 									}
 								],
 								"ifTrueActivities": [
 									{
-										"name": "vartrue",
+										"name": "Set variable2",
 										"type": "SetVariable",
 										"dependsOn": [],
 										"policy": {
@@ -115,10 +114,9 @@
 										"userProperties": [],
 										"typeProperties": {
 											"variableName": "a",
-											"value": {
-												"value": "@variables('x')",
-												"type": "Expression"
-											}
+											"value": [
+												"'Yes'"
+											]
 										}
 									}
 								]
