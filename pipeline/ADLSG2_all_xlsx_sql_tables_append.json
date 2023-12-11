@@ -22,7 +22,10 @@
 				"typeProperties": {
 					"dataset": {
 						"referenceName": "temp",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"Folderpath": "/Path/To/Root"
+						}
 					},
 					"fieldList": [
 						"childItems"

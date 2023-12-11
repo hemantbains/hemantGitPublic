@@ -5,6 +5,12 @@
 			"referenceName": "LS_ADLSg2",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"Folderpath": {
+				"type": "string",
+				"defaultValue": "/Path/To/Root"
+			}
+		},
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
