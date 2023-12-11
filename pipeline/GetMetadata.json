@@ -121,11 +121,10 @@
 														"referenceName": "Binary1",
 														"type": "DatasetReference"
 													},
-													"fieldList": [
-														"childItems"
-													],
+													"fieldList": [],
 													"storeSettings": {
-														"type": "AzureBlobFSReadSettings"
+														"type": "AzureBlobFSReadSettings",
+														"enablePartitionDiscovery": false
 													},
 													"formatSettings": {
 														"type": "BinaryReadSettings"
