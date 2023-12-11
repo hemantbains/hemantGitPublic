@@ -80,10 +80,7 @@
 		},
 		"variables": {
 			"filename": {
-				"type": "Array",
-				"defaultValue": [
-					"x"
-				]
+				"type": "Array"
 			}
 		},
 		"annotations": []
