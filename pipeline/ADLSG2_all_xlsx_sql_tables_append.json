@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Adlsg2edls",
+				"name": "GetFolderContents",
 				"type": "GetMetadata",
 				"dependsOn": [],
 				"policy": {
@@ -13,16 +13,29 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": [],
+				"userProperties": [
+					{
+						"name": "FolderPath",
+						"value": "/Path/To/Root"
+					}
+				],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "ADLSG2_all_files",
-						"type": "DatasetReference"
+						"referenceName": "StorageMetadata",
+						"type": "DatasetReference",
+						"parameters": {
+							"FolderPath": "/Path/To/Root"
+						}
 					},
-					"fieldList": [],
+					"fieldList": [
+						"childItems"
+					],
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
 						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "BinaryReadSettings"
 					}
 				}
 			}
