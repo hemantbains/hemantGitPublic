@@ -297,7 +297,7 @@
 		"parameters": {
 			"RootPath": {
 				"type": "string",
-				"defaultValue": "/"
+				"defaultValue": "/edls-input/Schoology"
 			}
 		},
 		"variables": {
