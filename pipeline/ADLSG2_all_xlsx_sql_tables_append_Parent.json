@@ -84,6 +84,25 @@
 									"value": "@contains(variables('x'),'.')",
 									"type": "Expression"
 								},
+								"ifFalseActivities": [
+									{
+										"name": "varfalsefoldernames",
+										"type": "SetVariable",
+										"dependsOn": [],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "b",
+											"value": {
+												"value": "@variables('x')",
+												"type": "Expression"
+											}
+										}
+									}
+								],
 								"ifTrueActivities": [
 									{
 										"name": "vartrue",
@@ -114,6 +133,9 @@
 				"type": "String"
 			},
 			"a": {
+				"type": "Array"
+			},
+			"b": {
 				"type": "Array"
 			}
 		},

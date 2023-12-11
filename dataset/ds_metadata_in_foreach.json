@@ -1,0 +1,22 @@
+{
+	"name": "ds_metadata_in_foreach",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLSg2",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"FolderName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "edls-input"
+			}
+		}
+	}
+}
