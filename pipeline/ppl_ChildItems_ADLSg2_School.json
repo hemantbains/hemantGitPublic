@@ -1,9 +1,9 @@
 {
-	"name": "ADLSG2_all_xlsx_sql_tables_append_Parent",
+	"name": "ppl_ChildItems_ADLSg2_School",
 	"properties": {
 		"activities": [
 			{
-				"name": "Folder Info",
+				"name": "File Info",
 				"type": "GetMetadata",
 				"dependsOn": [],
 				"policy": {
@@ -16,8 +16,14 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "ds_folder_info",
-						"type": "DatasetReference"
+						"referenceName": "ds_Child_FileInfo",
+						"type": "DatasetReference",
+						"parameters": {
+							"ChildFolder": {
+								"value": "@pipeline().parameters.Para_ParentFolder",
+								"type": "Expression"
+							}
+						}
 					},
 					"fieldList": [
 						"childItems"
@@ -32,11 +38,11 @@
 				}
 			},
 			{
-				"name": "ForEach_Folder_Info",
+				"name": "ForEach1_FileInfo_Child",
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Folder Info",
+						"activity": "File Info",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -45,27 +51,21 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Folder Info').output.childItems",
+						"value": "@activity('File Info').output.childItems",
 						"type": "Expression"
 					},
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Execute child pipeline",
-							"type": "ExecutePipeline",
+							"name": "Append variable1",
+							"type": "AppendVariable",
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
-								"pipeline": {
-									"referenceName": "ppl_ChildItems_ADLSg2_School",
-									"type": "PipelineReference"
-								},
-								"waitOnCompletion": true,
-								"parameters": {
-									"Para_ParentFolder": {
-										"value": "@item()",
-										"type": "Expression"
-									}
+								"variableName": "filename",
+								"value": {
+									"value": "@item().name",
+									"type": "Expression"
 								}
 							}
 						}
@@ -73,6 +73,19 @@
 				}
 			}
 		],
+		"parameters": {
+			"Para_ParentFolder": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"filename": {
+				"type": "Array",
+				"defaultValue": [
+					"x"
+				]
+			}
+		},
 		"annotations": []
 	}
 }

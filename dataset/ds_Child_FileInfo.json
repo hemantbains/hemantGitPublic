@@ -1,0 +1,23 @@
+{
+	"name": "ds_Child_FileInfo",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLSg2",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"ChildFolder": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Schoology",
+				"fileSystem": "edls-input"
+			}
+		}
+	}
+}
