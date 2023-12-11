@@ -5,17 +5,13 @@
 			"referenceName": "LS_ADLSg2",
 			"type": "LinkedServiceReference"
 		},
-		"parameters": {
-			"filename": {
-				"type": "string"
-			}
-		},
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "Schoology",
+				"fileName": "Question-Data-Unit-5-Lesson-22-2022-04-10-212407.xlsx",
+				"folderPath": "Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1",
 				"fileSystem": "edls-input"
 			},
 			"sheetIndex": 0,

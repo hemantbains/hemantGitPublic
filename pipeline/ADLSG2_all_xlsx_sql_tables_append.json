@@ -21,11 +21,8 @@
 				],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "StorageMetadata",
-						"type": "DatasetReference",
-						"parameters": {
-							"FolderPath": "/Path/To/Root"
-						}
+						"referenceName": "temp",
+						"type": "DatasetReference"
 					},
 					"fieldList": [
 						"childItems"
@@ -33,9 +30,6 @@
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
 						"enablePartitionDiscovery": false
-					},
-					"formatSettings": {
-						"type": "BinaryReadSettings"
 					}
 				}
 			}
