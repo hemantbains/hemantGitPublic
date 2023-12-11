@@ -1,0 +1,20 @@
+{
+	"name": "ADLSG2_all_files",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adlsg2_edls",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Schoology",
+				"fileSystem": "edls-input"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}
