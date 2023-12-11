@@ -1,9 +1,9 @@
 {
-	"name": "ADLSG2_all_xlsx_sql_tables_append",
+	"name": "ADLSG2_all_xlsx_sql_tables_append_Parent",
 	"properties": {
 		"activities": [
 			{
-				"name": "GetFolderContents",
+				"name": "Folder Info",
 				"type": "GetMetadata",
 				"dependsOn": [],
 				"policy": {
@@ -13,19 +13,11 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": [
-					{
-						"name": "FolderPath",
-						"value": "/Path/To/Root"
-					}
-				],
+				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "temp",
-						"type": "DatasetReference",
-						"parameters": {
-							"Folderpath": "/Path/To/Root"
-						}
+						"referenceName": "ds_folder_info",
+						"type": "DatasetReference"
 					},
 					"fieldList": [
 						"childItems"
@@ -33,7 +25,41 @@
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
 						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "BinaryReadSettings"
 					}
+				}
+			},
+			{
+				"name": "ForEach_Folder_Info",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Folder Info",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Folder Info').output.childItems",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Wait1",
+							"type": "Wait",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"waitTimeInSeconds": 1
+							}
+						}
+					]
 				}
 			}
 		],
