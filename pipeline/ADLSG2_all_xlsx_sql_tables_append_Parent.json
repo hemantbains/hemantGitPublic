@@ -32,7 +32,7 @@
 				}
 			},
 			{
-				"name": "ForEach_Folder_Info",
+				"name": "ForEach_metaData01",
 				"type": "ForEach",
 				"dependsOn": [
 					{
@@ -51,21 +51,38 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Execute child pipeline",
-							"type": "ExecutePipeline",
+							"name": "Set variable1",
+							"type": "SetVariable",
 							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
-								"pipeline": {
-									"referenceName": "ppl_ChildItems_ADLSg2_School",
-									"type": "PipelineReference"
-								},
-								"waitOnCompletion": true,
-								"parameters": {
-									"Para_ParentFolder": {
-										"value": "@item()",
-										"type": "Expression"
-									}
+								"variableName": "x",
+								"value": {
+									"value": "@item().name",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "If Condition1",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Set variable1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@contains(variables('x'),'.')",
+									"type": "Expression"
 								}
 							}
 						}
@@ -73,6 +90,11 @@
 				}
 			}
 		],
+		"variables": {
+			"x": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
