@@ -1,0 +1,26 @@
+{
+	"name": "temp",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLSg2",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"filename": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Schoology",
+				"fileSystem": "edls-input"
+			},
+			"sheetIndex": 0,
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}
