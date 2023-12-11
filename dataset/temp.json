@@ -10,8 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Question-Data-Unit-5-Lesson-22-2022-04-10-212407.xlsx",
-				"folderPath": "Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1",
+				"folderPath": "Schoology",
 				"fileSystem": "edls-input"
 			},
 			"sheetIndex": 0,
