@@ -56,7 +56,48 @@
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
-								"cases": []
+								"on": {
+									"value": "@item().type",
+									"type": "Expression"
+								},
+								"cases": [
+									{
+										"value": "Folder_name",
+										"activities": [
+											{
+												"name": "Append variable1",
+												"type": "AppendVariable",
+												"dependsOn": [],
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "File_name",
+													"value": {
+														"value": "@activity('Get Metadata1').output.itemName",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									},
+									{
+										"value": "File_name",
+										"activities": [
+											{
+												"name": "Append variable2",
+												"type": "AppendVariable",
+												"dependsOn": [],
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "File_name",
+													"value": {
+														"value": "@activity('Get Metadata1').output.itemName",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									}
+								]
 							}
 						}
 					]
@@ -64,7 +105,13 @@
 			}
 		],
 		"variables": {
-			"a": {
+			"Folder": {
+				"type": "Array"
+			},
+			"file": {
+				"type": "Array"
+			},
+			"File_name": {
 				"type": "Array"
 			}
 		},

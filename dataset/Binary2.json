@@ -5,11 +5,20 @@
 			"referenceName": "LS_ADLSg2",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"Foldername": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "Binary",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().Foldername",
+					"type": "Expression"
+				},
 				"folderPath": "Schoology",
 				"fileSystem": "edls-input"
 			}
