@@ -105,12 +105,6 @@
 			}
 		],
 		"variables": {
-			"Folder": {
-				"type": "Array"
-			},
-			"file": {
-				"type": "Array"
-			},
 			"File_name": {
 				"type": "Array"
 			}
