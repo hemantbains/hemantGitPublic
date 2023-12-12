@@ -62,7 +62,7 @@
 								},
 								"cases": [
 									{
-										"value": "Folder_name",
+										"value": "Folder",
 										"activities": [
 											{
 												"name": "Append variable1",
@@ -80,7 +80,7 @@
 										]
 									},
 									{
-										"value": "File_name",
+										"value": "File",
 										"activities": [
 											{
 												"name": "Append variable2",
