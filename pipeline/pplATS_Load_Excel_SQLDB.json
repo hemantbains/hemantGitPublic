@@ -57,7 +57,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"on": {
-									"value": "@item().type",
+									"value": "@activity('Get Metadata1').output.itemType",
 									"type": "Expression"
 								},
 								"cases": [
@@ -96,6 +96,17 @@
 												}
 											}
 										]
+									}
+								],
+								"defaultActivities": [
+									{
+										"name": "Wait1",
+										"type": "Wait",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"waitTimeInSeconds": 1
+										}
 									}
 								]
 							}
