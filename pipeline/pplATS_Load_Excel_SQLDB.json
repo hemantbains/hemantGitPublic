@@ -3,115 +3,23 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "ForEach1",
-				"type": "ForEach",
+				"name": "Notebook1",
+				"type": "DatabricksNotebook",
 				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
-					"items": {
-						"value": "@activity('Get Metadata1').output.exists",
-						"type": "Expression"
-					},
-					"isSequential": true,
-					"activities": [
-						{
-							"name": "Switch1",
-							"type": "Switch",
-							"dependsOn": [
-								{
-									"activity": "Get Metadata1",
-									"dependencyConditions": [
-										"Skipped"
-									]
-								}
-							],
-							"userProperties": [],
-							"typeProperties": {
-								"on": {
-									"value": "@item().type",
-									"type": "Expression"
-								},
-								"cases": [
-									{
-										"value": "Folder",
-										"activities": [
-											{
-												"name": "Append variable1",
-												"type": "AppendVariable",
-												"dependsOn": [],
-												"userProperties": [],
-												"typeProperties": {
-													"variableName": "File_name",
-													"value": {
-														"value": "@activity('Get Metadata1').output.itemName",
-														"type": "Expression"
-													}
-												}
-											}
-										]
-									},
-									{
-										"value": "File",
-										"activities": [
-											{
-												"name": "Append variable2",
-												"type": "AppendVariable",
-												"dependsOn": [],
-												"userProperties": [],
-												"typeProperties": {
-													"variableName": "File_name",
-													"value": {
-														"value": "@activity('Get Metadata1').output.itemName",
-														"type": "Expression"
-													}
-												}
-											}
-										]
-									}
-								],
-								"defaultActivities": [
-									{
-										"name": "Wait1",
-										"type": "Wait",
-										"dependsOn": [],
-										"userProperties": [],
-										"typeProperties": {
-											"waitTimeInSeconds": 1
-										}
-									}
-								]
-							}
-						},
-						{
-							"name": "Get Metadata1",
-							"type": "GetMetadata",
-							"dependsOn": [],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"dataset": {
-									"referenceName": "Binary2",
-									"type": "DatasetReference"
-								},
-								"fieldList": [
-									"childItems"
-								],
-								"storeSettings": {
-									"type": "AzureBlobFSReadSettings",
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "BinaryReadSettings"
-								}
-							}
-						}
-					]
+					"notebookPath": "/Users/hemant@insightanalytics.us/Storage Account Loop All Folders and Files"
+				},
+				"linkedServiceName": {
+					"referenceName": "LS_AzureDatabricks1",
+					"type": "LinkedServiceReference"
 				}
 			}
 		],
