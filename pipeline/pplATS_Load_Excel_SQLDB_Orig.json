@@ -41,7 +41,7 @@
 				"typeProperties": {
 					"variableName": "varFile_names",
 					"value": {
-						"value": "@activity('Notebook1').output",
+						"value": "@activity('Notebook1').output.runoutput",
 						"type": "Expression"
 					}
 				}
