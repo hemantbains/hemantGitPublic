@@ -27,9 +27,11 @@
 			{
 				"name": "Set variable1",
 				"type": "SetVariable",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
-						"activity": "varAr_ADLS_filenames",
+						"activity": "Set variable2",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -41,7 +43,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "File_names",
+					"variableName": "varFile_names",
 					"value": {
 						"value": "@variables('Var_Ar_tmpFilenames')",
 						"type": "Expression"
@@ -51,6 +53,8 @@
 			{
 				"name": "ForEach1",
 				"type": "ForEach",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Set variable1",
@@ -83,7 +87,7 @@
 				}
 			},
 			{
-				"name": "varAr_ADLS_filenames",
+				"name": "Set variable2",
 				"type": "SetVariable",
 				"dependsOn": [],
 				"policy": {
@@ -92,54 +96,24 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "File_names",
+					"variableName": "varFile_names",
 					"value": {
-						"name": "File_names",
-						"value": [
-							"Schoology/AAOTA",
-							"Schoology/AAOTA/2021-22",
-							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments",
-							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA",
-							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/0 - Grade K",
-							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 2",
-							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/1 - Grade 1",
-							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/1 - Grade 1/Sec 1",
-							"Schoology/AAOTA/2021-22/Student Information",
-							"Schoology/AAOTA/2022-23",
-							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments",
-							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA",
-							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K",
-							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1",
-							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 2/Question-Data-Unit-5-Lesson-22-2022-04-10-213323.xlsx",
-							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 2/Student-Submissions-Unit-5-Lesson-22-2022-04-10-213323.xlsx",
-							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 2/Submission-Summary-Unit-5-Lesson-22-2022-04-10-213323.xlsx",
-							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/1 - Grade 1/Sec 1/Question-Data-Unit-4-Lesson-17-2022-02-12-144305.xlsx",
-							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/1 - Grade 1/Sec 1/Student-Submissions-Unit-4-Lesson-17-2022-02-12-144305.xlsx",
-							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/1 - Grade 1/Sec 1/Submission-Summary-Unit-4-Lesson-17-2022-02-12-144305.xlsx",
-							"Schoology/AAOTA/2021-22/Student Information/_2020-21 - Student Information.xlsx",
-							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Question-Data-Curious-About-Kindergarten-Weekly-Assessment-Week-1-2022-09-06-184412.xlsx",
-							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Question-Data-Curious-About-Kindergarten-Weekly-Assessment-Week-2-2022-09-06-184713.xlsx",
-							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Question-Data-Curious-About-Kindergarten-Weekly-Assessment-Week-3-2022-09-11-055719.xlsx",
-							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Student-Submissions-Curious-About-Kindergarten-Weekly-Assessment-Week-1-2022-09-06-184412.xlsx",
-							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Student-Submissions-Curious-About-Kindergarten-Weekly-Assessment-Week-2-2022-09-06-184713.xlsx",
-							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Student-Submissions-Curious-About-Kindergarten-Weekly-Assessment-Week-3-2022-09-11-055719.xlsx",
-							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Submission-Summary-Curious-About-Kindergarten-Weekly-Assessment-Week-1-2022-09-06-184412.xlsx",
-							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Submission-Summary-Curious-About-Kindergarten-Weekly-Assessment-Week-2-2022-09-06-184713.xlsx",
-							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Submission-Summary-Curious-About-Kindergarten-Weekly-Assessment-Week-3-2022-09-11-055719.xlsx"
-						]
+						"value": "@split(variables('File_names'),',')",
+						"type": "Expression"
 					}
 				}
 			}
 		],
 		"variables": {
-			"File_names": {
+			"varFile_names": {
 				"type": "Array"
 			},
 			"chk": {
 				"type": "String"
 			},
-			"sum": {
-				"type": "String"
+			"File_names": {
+				"type": "String",
+				"defaultValue": "Schoology/AAOTA,Schoology/AAOTA/2021-22,Schoology/AAOTA/2021-22/1 - Lesson  Assessments,Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA,Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/0 - Grade K,Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 2,Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/1 - Grade 1,Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/1 - Grade 1/Sec 1,Schoology/AAOTA/2021-22/Student Information,Schoology/AAOTA/2022-23,Schoology/AAOTA/2022-23/1 - Lesson  Assessments,Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA,Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K,Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1,Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 2/Question-Data-Unit-5-Lesson-22-2022-04-10-213323.xlsx,Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 2/Student-Submissions-Unit-5-Lesson-22-2022-04-10-213323.xlsx,Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 2/Submission-Summary-Unit-5-Lesson-22-2022-04-10-213323.xlsx,Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/1 - Grade 1/Sec 1/Question-Data-Unit-4-Lesson-17-2022-02-12-144305.xlsx,Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/1 - Grade 1/Sec 1/Student-Submissions-Unit-4-Lesson-17-2022-02-12-144305.xlsx,Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/1 - Grade 1/Sec 1/Submission-Summary-Unit-4-Lesson-17-2022-02-12-144305.xlsx,Schoology/AAOTA/2021-22/Student Information/_2020-21 - Student Information.xlsx,Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Question-Data-Curious-About-Kindergarten-Weekly-Assessment-Week-1-2022-09-06-184412.xlsx,Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Question-Data-Curious-About-Kindergarten-Weekly-Assessment-Week-2-2022-09-06-184713.xlsx,Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Question-Data-Curious-About-Kindergarten-Weekly-Assessment-Week-3-2022-09-11-055719.xlsx,Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Student-Submissions-Curious-About-Kindergarten-Weekly-Assessment-Week-1-2022-09-06-184412.xlsx,Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Student-Submissions-Curious-About-Kindergarten-Weekly-Assessment-Week-2-2022-09-06-184713.xlsx,Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Student-Submissions-Curious-About-Kindergarten-Weekly-Assessment-Week-3-2022-09-11-055719.xlsx,Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Submission-Summary-Curious-About-Kindergarten-Weekly-Assessment-Week-1-2022-09-06-184412.xlsx,Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Submission-Summary-Curious-About-Kindergarten-Weekly-Assessment-Week-2-2022-09-06-184713.xlsx,Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Submission-Summary-Curious-About-Kindergarten-Weekly-Assessment-Week-3-2022-09-11-055719.xlsx"
 			},
 			"Var_Ar_tmpFilenames": {
 				"type": "Array"
