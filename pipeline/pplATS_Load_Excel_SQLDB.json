@@ -5,6 +5,8 @@
 			{
 				"name": "Notebook1",
 				"type": "DatabricksNotebook",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -27,7 +29,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "Notebook1",
+						"activity": "varAr_ADLS_filenames",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -41,26 +43,7 @@
 				"typeProperties": {
 					"variableName": "File_names",
 					"value": {
-						"value": "@activity('Notebook1').output.runOutput",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "Set variable2",
-				"type": "SetVariable",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [],
-				"policy": {
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "chk",
-					"value": {
-						"value": "@variables('File_names')[0]",
+						"value": "@variables('Var_Ar_tmpFilenames')",
 						"type": "Expression"
 					}
 				}
@@ -85,23 +68,66 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Set variable3",
-							"type": "SetVariable",
+							"name": "If item is xlls",
+							"type": "IfCondition",
 							"dependsOn": [],
-							"policy": {
-								"secureOutput": false,
-								"secureInput": false
-							},
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "sum",
-								"value": {
-									"value": "@concat(item())",
+								"expression": {
+									"value": "@equals(split('.',item())[1],'xlsx')",
 									"type": "Expression"
 								}
 							}
 						}
 					]
+				}
+			},
+			{
+				"name": "varAr_ADLS_filenames",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "File_names",
+					"value": {
+						"name": "File_names",
+						"value": [
+							"Schoology/AAOTA",
+							"Schoology/AAOTA/2021-22",
+							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments",
+							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA",
+							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/0 - Grade K",
+							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 2",
+							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/1 - Grade 1",
+							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/1 - Grade 1/Sec 1",
+							"Schoology/AAOTA/2021-22/Student Information",
+							"Schoology/AAOTA/2022-23",
+							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments",
+							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA",
+							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K",
+							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1",
+							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 2/Question-Data-Unit-5-Lesson-22-2022-04-10-213323.xlsx",
+							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 2/Student-Submissions-Unit-5-Lesson-22-2022-04-10-213323.xlsx",
+							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 2/Submission-Summary-Unit-5-Lesson-22-2022-04-10-213323.xlsx",
+							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/1 - Grade 1/Sec 1/Question-Data-Unit-4-Lesson-17-2022-02-12-144305.xlsx",
+							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/1 - Grade 1/Sec 1/Student-Submissions-Unit-4-Lesson-17-2022-02-12-144305.xlsx",
+							"Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/1 - Grade 1/Sec 1/Submission-Summary-Unit-4-Lesson-17-2022-02-12-144305.xlsx",
+							"Schoology/AAOTA/2021-22/Student Information/_2020-21 - Student Information.xlsx",
+							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Question-Data-Curious-About-Kindergarten-Weekly-Assessment-Week-1-2022-09-06-184412.xlsx",
+							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Question-Data-Curious-About-Kindergarten-Weekly-Assessment-Week-2-2022-09-06-184713.xlsx",
+							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Question-Data-Curious-About-Kindergarten-Weekly-Assessment-Week-3-2022-09-11-055719.xlsx",
+							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Student-Submissions-Curious-About-Kindergarten-Weekly-Assessment-Week-1-2022-09-06-184412.xlsx",
+							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Student-Submissions-Curious-About-Kindergarten-Weekly-Assessment-Week-2-2022-09-06-184713.xlsx",
+							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Student-Submissions-Curious-About-Kindergarten-Weekly-Assessment-Week-3-2022-09-11-055719.xlsx",
+							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Submission-Summary-Curious-About-Kindergarten-Weekly-Assessment-Week-1-2022-09-06-184412.xlsx",
+							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Submission-Summary-Curious-About-Kindergarten-Weekly-Assessment-Week-2-2022-09-06-184713.xlsx",
+							"Schoology/AAOTA/2022-23/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 1/Submission-Summary-Curious-About-Kindergarten-Weekly-Assessment-Week-3-2022-09-11-055719.xlsx"
+						]
+					}
 				}
 			}
 		],
@@ -114,6 +140,9 @@
 			},
 			"sum": {
 				"type": "String"
+			},
+			"Var_Ar_tmpFilenames": {
+				"type": "Array"
 			}
 		},
 		"folder": {
