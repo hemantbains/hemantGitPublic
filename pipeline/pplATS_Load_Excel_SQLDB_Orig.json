@@ -60,7 +60,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@variables('varFile_names')",
+						"value": "@variables('varFile_names')[0]",
 						"type": "Expression"
 					},
 					"isSequential": true,
