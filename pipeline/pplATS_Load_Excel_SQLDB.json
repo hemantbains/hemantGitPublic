@@ -25,13 +25,11 @@
 				}
 			},
 			{
-				"name": "Set variable1",
+				"name": "Set var output of dbfs",
 				"type": "SetVariable",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
-						"activity": "Set variable2",
+						"activity": "Var like Databricks output",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -45,7 +43,7 @@
 				"typeProperties": {
 					"variableName": "varFile_names",
 					"value": {
-						"value": "@variables('Var_Ar_tmpFilenames')",
+						"value": "@variables('Var_Ar_tmpFilenames').output.value",
 						"type": "Expression"
 					}
 				}
@@ -53,11 +51,9 @@
 			{
 				"name": "ForEach1",
 				"type": "ForEach",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
-						"activity": "Set variable1",
+						"activity": "Set var output of dbfs",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -66,19 +62,24 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@variables('File_names')",
+						"value": "@variables('varFile_names')",
 						"type": "Expression"
 					},
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "If item is xlls",
-							"type": "IfCondition",
+							"name": "Set variable1",
+							"type": "SetVariable",
 							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
 							"userProperties": [],
 							"typeProperties": {
-								"expression": {
-									"value": "@equals(split('.',item())[1],'xlsx')",
+								"variableName": "chk",
+								"value": {
+									"value": "@item()",
 									"type": "Expression"
 								}
 							}
@@ -87,7 +88,7 @@
 				}
 			},
 			{
-				"name": "Set variable2",
+				"name": "Var like Databricks output",
 				"type": "SetVariable",
 				"dependsOn": [],
 				"policy": {
@@ -96,7 +97,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "varFile_names",
+					"variableName": "Var_Ar_tmpFilenames",
 					"value": {
 						"value": "@split(variables('File_names'),',')",
 						"type": "Expression"
