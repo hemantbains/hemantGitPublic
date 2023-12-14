@@ -1,5 +1,5 @@
 {
-	"name": "pplATS_Load_Excel_SQLDB_Orig",
+	"name": "pplATS_Load_Excel_SQLDB",
 	"properties": {
 		"activities": [
 			{
@@ -23,7 +23,7 @@
 				}
 			},
 			{
-				"name": "Set var output of dbfs",
+				"name": "Set variable1",
 				"type": "SetVariable",
 				"dependsOn": [
 					{
@@ -39,19 +39,19 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "varFile_names",
+					"variableName": "File_names",
 					"value": {
-						"value": "@activity('Notebook1').output.runoutput",
+						"value": "@activity('Notebook1').output.runOutput",
 						"type": "Expression"
 					}
 				}
 			},
 			{
-				"name": "ForEach1",
+				"name": "ForEach1_dbs_item",
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Set var output of dbfs",
+						"activity": "Set variable1",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -60,13 +60,13 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@variables('varFile_names')",
+						"value": "@variables('File_names')",
 						"type": "Expression"
 					},
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Set variable1",
+							"name": "Set variable3",
 							"type": "SetVariable",
 							"dependsOn": [],
 							"policy": {
@@ -75,11 +75,27 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "chk",
+								"variableName": "var_foreach",
 								"value": {
 									"value": "@item()",
 									"type": "Expression"
 								}
+							}
+						},
+						{
+							"name": "Switch1",
+							"type": "Switch",
+							"dependsOn": [
+								{
+									"activity": "Set variable3",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"cases": []
 							}
 						}
 					]
@@ -87,10 +103,10 @@
 			}
 		],
 		"variables": {
-			"varFile_names": {
+			"File_names": {
 				"type": "Array"
 			},
-			"chk": {
+			"var_foreach": {
 				"type": "String"
 			}
 		},
