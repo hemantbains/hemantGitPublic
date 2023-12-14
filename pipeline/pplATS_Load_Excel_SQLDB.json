@@ -95,7 +95,7 @@
 										"typeProperties": {
 											"variableName": "varOtherthanStudentfilename",
 											"value": {
-												"value": "@variables('varForEachDbfsItem')",
+												"value": "split(variables('varForEachDbfsItem'),'-')[0]+'-'+\nsplit(variables('varForEachDbfsItem'),'-')[1]",
 												"type": "Expression"
 											}
 										}
@@ -158,7 +158,7 @@
 			}
 		},
 		"folder": {
-			"name": "tmp/myPipelines"
+			"name": "tmp/myPipelines/Working"
 		},
 		"annotations": []
 	}
