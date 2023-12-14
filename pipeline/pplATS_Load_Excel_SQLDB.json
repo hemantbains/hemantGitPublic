@@ -95,7 +95,7 @@
 										"typeProperties": {
 											"variableName": "varOtherthanStudentfilename",
 											"value": {
-												"value": "split(variables('varForEachDbfsItem'),'-')[0]+'-'+\nsplit(variables('varForEachDbfsItem'),'-')[1]",
+												"value": "@{concat(split(variables('varForEachDbfsItem'),'-')[0],'-',split(variables('varForEachDbfsItem'),'-')[1])}",
 												"type": "Expression"
 											}
 										}
