@@ -84,7 +84,7 @@
 								},
 								"ifFalseActivities": [
 									{
-										"name": "Act_var_other_than_student_filename",
+										"name": "ActSet_var_otherthan_student",
 										"type": "SetVariable",
 										"dependsOn": [],
 										"policy": {
@@ -95,9 +95,329 @@
 										"typeProperties": {
 											"variableName": "varOtherthanStudentfilename",
 											"value": {
-												"value": "@{concat(split(variables('varForEachDbfsItem'),'-')[0],'-',split(variables('varForEachDbfsItem'),'-')[1])}",
+												"value": "@variables('varForEachDbfsItem')",
 												"type": "Expression"
 											}
+										}
+									},
+									{
+										"name": "If Condition to load Asmt files based on name",
+										"type": "IfCondition",
+										"dependsOn": [
+											{
+												"activity": "ActSet_var_otherthan_student",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"userProperties": [],
+										"typeProperties": {
+											"expression": {
+												"value": "@contains(variables('varForEachDbfsItem'),'Question-Data')",
+												"type": "Expression"
+											},
+											"ifFalseActivities": [
+												{
+													"name": "ActSet_var_otherthanQues_AsmtFiles",
+													"type": "SetVariable",
+													"dependsOn": [],
+													"policy": {
+														"secureOutput": false,
+														"secureInput": false
+													},
+													"userProperties": [],
+													"typeProperties": {
+														"variableName": "varOtherthanQuesfilename",
+														"value": {
+															"value": "@variables('varForEachDbfsItem')",
+															"type": "Expression"
+														}
+													}
+												}
+											],
+											"ifTrueActivities": [
+												{
+													"name": "ActSetVarQuestionDatafilename",
+													"type": "SetVariable",
+													"dependsOn": [],
+													"policy": {
+														"secureOutput": false,
+														"secureInput": false
+													},
+													"userProperties": [],
+													"typeProperties": {
+														"variableName": "varQuesdataFilename",
+														"value": {
+															"value": "@variables('varForEachDbfsItem')",
+															"type": "Expression"
+														}
+													}
+												},
+												{
+													"name": "Copy data1_Quesfiles",
+													"type": "Copy",
+													"dependsOn": [
+														{
+															"activity": "ActSetVarQuestionDatafilename",
+															"dependencyConditions": [
+																"Succeeded"
+															]
+														}
+													],
+													"policy": {
+														"timeout": "0.12:00:00",
+														"retry": 0,
+														"retryIntervalInSeconds": 30,
+														"secureOutput": false,
+														"secureInput": false
+													},
+													"userProperties": [],
+													"typeProperties": {
+														"enableStaging": false
+													}
+												}
+											]
+										}
+									},
+									{
+										"name": "If Condition to sep Stud Info Asmt files_copy1",
+										"type": "IfCondition",
+										"dependsOn": [
+											{
+												"activity": "ActSet_var_otherthan_student",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"userProperties": [],
+										"typeProperties": {
+											"expression": {
+												"value": "@contains(variables('varForEachDbfsItem'),'Student Information')",
+												"type": "Expression"
+											},
+											"ifFalseActivities": [
+												{
+													"name": "ActSet_var_otherthan_student_copy1",
+													"type": "SetVariable",
+													"dependsOn": [],
+													"policy": {
+														"secureOutput": false,
+														"secureInput": false
+													},
+													"userProperties": [],
+													"typeProperties": {
+														"variableName": "varOtherthanStudentfilename",
+														"value": {
+															"value": "@variables('varForEachDbfsItem')",
+															"type": "Expression"
+														}
+													}
+												}
+											],
+											"ifTrueActivities": [
+												{
+													"name": "ActSetVarStudent filename_copy1",
+													"type": "SetVariable",
+													"dependsOn": [],
+													"policy": {
+														"secureOutput": false,
+														"secureInput": false
+													},
+													"userProperties": [],
+													"typeProperties": {
+														"variableName": "varStudent_filename",
+														"value": {
+															"value": "@variables('varForEachDbfsItem')",
+															"type": "Expression"
+														}
+													}
+												},
+												{
+													"name": "Copy data1_copy1",
+													"type": "Copy",
+													"dependsOn": [
+														{
+															"activity": "ActSetVarStudent filename_copy1",
+															"dependencyConditions": [
+																"Succeeded"
+															]
+														}
+													],
+													"policy": {
+														"timeout": "0.12:00:00",
+														"retry": 0,
+														"retryIntervalInSeconds": 30,
+														"secureOutput": false,
+														"secureInput": false
+													},
+													"userProperties": [],
+													"typeProperties": {
+														"enableStaging": false
+													}
+												}
+											]
+										}
+									},
+									{
+										"name": "If Condition to load Asmt files based on name_copy1",
+										"type": "IfCondition",
+										"dependsOn": [
+											{
+												"activity": "ActSet_var_otherthan_student",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"userProperties": [],
+										"typeProperties": {
+											"expression": {
+												"value": "@contains(variables('varForEachDbfsItem'),'Question-Data')",
+												"type": "Expression"
+											},
+											"ifFalseActivities": [
+												{
+													"name": "ActSet_var_otherthanQues_AsmtFiles_copy1",
+													"type": "SetVariable",
+													"dependsOn": [],
+													"policy": {
+														"secureOutput": false,
+														"secureInput": false
+													},
+													"userProperties": [],
+													"typeProperties": {
+														"variableName": "varOtherthanQuesfilename",
+														"value": {
+															"value": "@variables('varForEachDbfsItem')",
+															"type": "Expression"
+														}
+													}
+												}
+											],
+											"ifTrueActivities": [
+												{
+													"name": "ActSetVarQuestionDatafilename_copy1",
+													"type": "SetVariable",
+													"dependsOn": [],
+													"policy": {
+														"secureOutput": false,
+														"secureInput": false
+													},
+													"userProperties": [],
+													"typeProperties": {
+														"variableName": "varQuesdataFilename",
+														"value": {
+															"value": "@variables('varForEachDbfsItem')",
+															"type": "Expression"
+														}
+													}
+												},
+												{
+													"name": "Copy data1_Quesfiles_copy1",
+													"type": "Copy",
+													"dependsOn": [
+														{
+															"activity": "ActSetVarQuestionDatafilename_copy1",
+															"dependencyConditions": [
+																"Succeeded"
+															]
+														}
+													],
+													"policy": {
+														"timeout": "0.12:00:00",
+														"retry": 0,
+														"retryIntervalInSeconds": 30,
+														"secureOutput": false,
+														"secureInput": false
+													},
+													"userProperties": [],
+													"typeProperties": {
+														"enableStaging": false
+													}
+												}
+											]
+										}
+									},
+									{
+										"name": "If Condition to load Asmt files based on name_copy2",
+										"type": "IfCondition",
+										"dependsOn": [
+											{
+												"activity": "ActSet_var_otherthan_student",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"userProperties": [],
+										"typeProperties": {
+											"expression": {
+												"value": "@contains(variables('varForEachDbfsItem'),'Question-Data')",
+												"type": "Expression"
+											},
+											"ifFalseActivities": [
+												{
+													"name": "ActSet_var_otherthanQues_AsmtFiles_copy2",
+													"type": "SetVariable",
+													"dependsOn": [],
+													"policy": {
+														"secureOutput": false,
+														"secureInput": false
+													},
+													"userProperties": [],
+													"typeProperties": {
+														"variableName": "varOtherthanQuesfilename",
+														"value": {
+															"value": "@variables('varForEachDbfsItem')",
+															"type": "Expression"
+														}
+													}
+												}
+											],
+											"ifTrueActivities": [
+												{
+													"name": "ActSetVarQuestionDatafilename_copy2",
+													"type": "SetVariable",
+													"dependsOn": [],
+													"policy": {
+														"secureOutput": false,
+														"secureInput": false
+													},
+													"userProperties": [],
+													"typeProperties": {
+														"variableName": "varQuesdataFilename",
+														"value": {
+															"value": "@variables('varForEachDbfsItem')",
+															"type": "Expression"
+														}
+													}
+												},
+												{
+													"name": "Copy data1_Quesfiles_copy2",
+													"type": "Copy",
+													"dependsOn": [
+														{
+															"activity": "ActSetVarQuestionDatafilename_copy2",
+															"dependencyConditions": [
+																"Succeeded"
+															]
+														}
+													],
+													"policy": {
+														"timeout": "0.12:00:00",
+														"retry": 0,
+														"retryIntervalInSeconds": 30,
+														"secureOutput": false,
+														"secureInput": false
+													},
+													"userProperties": [],
+													"typeProperties": {
+														"enableStaging": false
+													}
+												}
+											]
 										}
 									}
 								],
@@ -117,6 +437,29 @@
 												"value": "@variables('varForEachDbfsItem')",
 												"type": "Expression"
 											}
+										}
+									},
+									{
+										"name": "Copy data1",
+										"type": "Copy",
+										"dependsOn": [
+											{
+												"activity": "ActSetVarStudent filename",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"enableStaging": false
 										}
 									}
 								]
@@ -154,6 +497,12 @@
 				"type": "String"
 			},
 			"varForEachDbfsItem": {
+				"type": "String"
+			},
+			"varQuesdataFilename": {
+				"type": "String"
+			},
+			"varOtherthanQuesfilename": {
 				"type": "String"
 			}
 		},
