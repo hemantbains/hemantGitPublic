@@ -23,7 +23,7 @@
 				}
 			},
 			{
-				"name": "Set variable1",
+				"name": "ActSetVarDBFSoutput",
 				"type": "SetVariable",
 				"dependsOn": [
 					{
@@ -39,7 +39,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "File_names",
+					"variableName": "varFile_names",
 					"value": {
 						"value": "@activity('Notebook1').output.runOutput",
 						"type": "Expression"
@@ -47,11 +47,11 @@
 				}
 			},
 			{
-				"name": "ForEach1_dbs_item",
+				"name": "ActForEach1_dbs_item",
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Set variable1",
+						"activity": "ActSetVarDBFSoutput",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -60,13 +60,70 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@variables('File_names')",
+						"value": "@variables('varFile_names')",
 						"type": "Expression"
 					},
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "Set variable3",
+							"name": "If Condition to sep Stud Info Asmt files",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "ActSetvarfromActForEach",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@contains(variables('varForEachDbfsItem'),'Student Information')",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "Act_var_other_than_student_filename",
+										"type": "SetVariable",
+										"dependsOn": [],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "varOtherthanStudentfilename",
+											"value": {
+												"value": "@variables('varForEachDbfsItem')",
+												"type": "Expression"
+											}
+										}
+									}
+								],
+								"ifTrueActivities": [
+									{
+										"name": "ActSetVarStudent filename",
+										"type": "SetVariable",
+										"dependsOn": [],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "varStudent_filename",
+											"value": {
+												"value": "@variables('varForEachDbfsItem')",
+												"type": "Expression"
+											}
+										}
+									}
+								]
+							}
+						},
+						{
+							"name": "ActSetvarfromActForEach",
 							"type": "SetVariable",
 							"dependsOn": [],
 							"policy": {
@@ -75,27 +132,11 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "var_foreach",
+								"variableName": "varForEachDbfsItem",
 								"value": {
 									"value": "@item()",
 									"type": "Expression"
 								}
-							}
-						},
-						{
-							"name": "Switch1",
-							"type": "Switch",
-							"dependsOn": [
-								{
-									"activity": "Set variable3",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
-							"userProperties": [],
-							"typeProperties": {
-								"cases": []
 							}
 						}
 					]
@@ -103,10 +144,16 @@
 			}
 		],
 		"variables": {
-			"File_names": {
+			"varFile_names": {
 				"type": "Array"
 			},
-			"var_foreach": {
+			"varStudent_filename": {
+				"type": "String"
+			},
+			"varOtherthanStudentfilename": {
+				"type": "String"
+			},
+			"varForEachDbfsItem": {
 				"type": "String"
 			}
 		},
