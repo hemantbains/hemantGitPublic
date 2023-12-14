@@ -92,10 +92,25 @@
 			},
 			"chk": {
 				"type": "String"
+			},
+			"varOtherthanStudent": {
+				"type": "String"
+			},
+			"var_if_OtherThanStudentfilename": {
+				"type": "String"
+			},
+			"varStudent_filename": {
+				"type": "String"
+			},
+			"varOtherthanStudentfilename": {
+				"type": "String"
+			},
+			"varForEachDbfsItem": {
+				"type": "String"
 			}
 		},
 		"folder": {
-			"name": "tmp/myPipelines"
+			"name": "tmp/myPipelines/Expmt"
 		},
 		"annotations": []
 	}

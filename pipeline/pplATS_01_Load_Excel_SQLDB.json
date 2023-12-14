@@ -63,7 +63,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "chk",
+					"variableName": "var_foreach",
 					"value": {
 						"value": "@variables('File_names')[0]",
 						"type": "Expression"
@@ -117,7 +117,7 @@
 			}
 		},
 		"folder": {
-			"name": "tmp/myPipelines"
+			"name": "tmp/myPipelines/Expmt"
 		},
 		"annotations": []
 	}
