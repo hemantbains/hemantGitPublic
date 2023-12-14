@@ -1,0 +1,1068 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adf-ats"
+		},
+		"LS_ADLSg2_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_ADLSg2'"
+		},
+		"LS_AzureDatabricks1_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'LS_AzureDatabricks1'"
+		},
+		"LS_ADLSg2_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsg2edls.dfs.core.windows.net/"
+		},
+		"LS_AzureDatabricks1_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "1212-065554-24xhgg4x"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_ADLSg2')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('LS_ADLSg2_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('LS_ADLSg2_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_AzureDatabricks1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://adb-8088961883452051.11.azuredatabricks.net",
+					"accessToken": {
+						"type": "SecureString",
+						"value": "[parameters('LS_AzureDatabricks1_accessToken')]"
+					},
+					"existingClusterId": "[parameters('LS_AzureDatabricks1_properties_typeProperties_existingClusterId')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pplATS_01_Load_Excel_SQLDB')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Notebook1",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hemant@insightanalytics.us/Storage Account Loop All Folders and Files"
+						},
+						"linkedServiceName": {
+							"referenceName": "LS_AzureDatabricks1",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Notebook1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "File_names",
+							"value": {
+								"value": "@activity('Notebook1').output.runOutput",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@variables('File_names')",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Set variable3",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "sum",
+										"value": {
+											"value": "@concat(item())",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"variables": {
+					"File_names": {
+						"type": "Array"
+					},
+					"chk": {
+						"type": "String"
+					},
+					"sum": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "tmp/myPipelines/Expmt"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureDatabricks1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pplATS_Load_Excel_SQLDB')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Notebook1",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hemant@insightanalytics.us/Storage Account Loop All Folders and Files"
+						},
+						"linkedServiceName": {
+							"referenceName": "LS_AzureDatabricks1",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "ActSetVarDBFSoutput",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Notebook1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "varFile_names",
+							"value": {
+								"value": "@activity('Notebook1').output.runOutput",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "ForEach_dbs_item",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "ActSetVarDBFSoutput",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@variables('varFile_names')",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "If Condition Student Information",
+									"type": "IfCondition",
+									"dependsOn": [
+										{
+											"activity": "SetvarfromActForEach",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"expression": {
+											"value": "@contains(variables('varForEachDbfsItem'),'Student Information')",
+											"type": "Expression"
+										},
+										"ifTrueActivities": [
+											{
+												"name": "ActSetVarStudent Information filename",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "varStudent_Information filename",
+													"value": {
+														"value": "@variables('varForEachDbfsItem')",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "Copy Students Data",
+												"type": "Copy",
+												"state": "Inactive",
+												"onInactiveMarkAs": "Succeeded",
+												"dependsOn": [
+													{
+														"activity": "ActSetVarStudent Information filename",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"enableStaging": false
+												}
+											}
+										]
+									}
+								},
+								{
+									"name": "SetvarfromActForEach",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "varForEachDbfsItem",
+										"value": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "If Condition to load SubmissionSummary file",
+									"type": "IfCondition",
+									"dependsOn": [
+										{
+											"activity": "SetvarfromActForEach",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"expression": {
+											"value": "@contains(variables('varForEachDbfsItem'),'Submission-Summary')",
+											"type": "Expression"
+										},
+										"ifTrueActivities": [
+											{
+												"name": "ActSetVarSubmissionSummary_filename",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_SubmissionSummary_filename",
+													"value": {
+														"value": "@variables('varForEachDbfsItem')",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "Copy data_ Student Summary",
+												"type": "Copy",
+												"state": "Inactive",
+												"onInactiveMarkAs": "Succeeded",
+												"dependsOn": [
+													{
+														"activity": "ActSetVarSubmissionSummary_filename",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"enableStaging": false
+												}
+											}
+										]
+									}
+								},
+								{
+									"name": "If Condition to load file Student Submission",
+									"type": "IfCondition",
+									"dependsOn": [
+										{
+											"activity": "SetvarfromActForEach",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"expression": {
+											"value": "@contains(variables('varForEachDbfsItem'),'Student-Submissions')",
+											"type": "Expression"
+										},
+										"ifTrueActivities": [
+											{
+												"name": "ActSetVarStudentSubmission",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_SubmissionSubmission_filename",
+													"value": {
+														"value": "@variables('varForEachDbfsItem')",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "Copy data_ Student Submission",
+												"type": "Copy",
+												"state": "Inactive",
+												"onInactiveMarkAs": "Succeeded",
+												"dependsOn": [
+													{
+														"activity": "ActSetVarStudentSubmission",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"enableStaging": false
+												}
+											}
+										]
+									}
+								},
+								{
+									"name": "If Condition to load Questions data",
+									"type": "IfCondition",
+									"dependsOn": [
+										{
+											"activity": "SetvarfromActForEach",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"expression": {
+											"value": "@contains(variables('varForEachDbfsItem'),'Question-Data')",
+											"type": "Expression"
+										},
+										"ifTrueActivities": [
+											{
+												"name": "ActSetVarQuestionsdata_file",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_Questionsdata_filename",
+													"value": {
+														"value": "@variables('varForEachDbfsItem')",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "Copy data - Question Data",
+												"type": "Copy",
+												"state": "Inactive",
+												"onInactiveMarkAs": "Succeeded",
+												"dependsOn": [
+													{
+														"activity": "ActSetVarQuestionsdata_file",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"enableStaging": false
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"variables": {
+					"varFile_names": {
+						"type": "Array"
+					},
+					"varStudent_filename": {
+						"type": "String"
+					},
+					"varOtherthanStudentfilename": {
+						"type": "String"
+					},
+					"varForEachDbfsItem": {
+						"type": "String"
+					},
+					"varQuesdataFilename": {
+						"type": "String"
+					},
+					"varOtherthanQuesfilename": {
+						"type": "String"
+					},
+					"VarStudentSummaryFilename": {
+						"type": "String"
+					},
+					"var_SubmissionSummary_filename": {
+						"type": "String"
+					},
+					"var_SubmissionSubmission_filename": {
+						"type": "String"
+					},
+					"var_Questionsdata_filename": {
+						"type": "String"
+					},
+					"varStudent_Information filename": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "tmp/myPipelines/Working"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureDatabricks1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pplATS_Load_Excel_SQLDB_Orig')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Notebook1",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/hemant@insightanalytics.us/Storage Account Loop All Folders and Files"
+						},
+						"linkedServiceName": {
+							"referenceName": "LS_AzureDatabricks1",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Set var output of dbfs",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Notebook1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "varFile_names",
+							"value": {
+								"value": "@activity('Notebook1').output.runoutput",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Set var output of dbfs",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@variables('varFile_names')",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Set variable1",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "chk",
+										"value": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"variables": {
+					"varFile_names": {
+						"type": "Array"
+					},
+					"chk": {
+						"type": "String"
+					},
+					"varOtherthanStudent": {
+						"type": "String"
+					},
+					"var_if_OtherThanStudentfilename": {
+						"type": "String"
+					},
+					"varStudent_filename": {
+						"type": "String"
+					},
+					"varOtherthanStudentfilename": {
+						"type": "String"
+					},
+					"varForEachDbfsItem": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "tmp/myPipelines/Expmt"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureDatabricks1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Binary1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLSg2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Path",
+						"fileSystem": "edls-input"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADLSg2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Binary2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLSg2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Schoology",
+						"fileSystem": "edls-input"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADLSg2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/GetMetadata')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Initialise queue",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "Queue",
+							"value": {
+								"value": "@json(concat('[{\"type\":\"Path\",\"name\":\"',pipeline().parameters.RootPath,'\"}]'))",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Until queue is empty",
+						"type": "Until",
+						"dependsOn": [
+							{
+								"activity": "Initialise queue",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals(length(variables('Queue')),0)",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Process queue head",
+									"type": "Switch",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"on": {
+											"value": "@variables('Queue')[0].type",
+											"type": "Expression"
+										},
+										"cases": [
+											{
+												"value": "Folder",
+												"activities": [
+													{
+														"name": "Append folder path",
+														"type": "SetVariable",
+														"dependsOn": [],
+														"policy": {
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"variableName": "_tmpQueue",
+															"value": {
+																"value": "@union(variables('Queue'),json(concat('[{\"type\":\"Path\",\"name\":\"',variables('CurrentFolderPath'),'/',variables('Queue')[0].name,'\"}]')))",
+																"type": "Expression"
+															}
+														}
+													},
+													{
+														"name": "varSwap2",
+														"type": "SetVariable",
+														"dependsOn": [
+															{
+																"activity": "Append folder path",
+																"dependencyConditions": [
+																	"Succeeded"
+																]
+															}
+														],
+														"policy": {
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"variableName": "Queue",
+															"value": {
+																"value": "@variables('_tmpQueue')",
+																"type": "Expression"
+															}
+														}
+													}
+												]
+											},
+											{
+												"value": "Path",
+												"activities": [
+													{
+														"name": "Get folder contents",
+														"type": "GetMetadata",
+														"dependsOn": [
+															{
+																"activity": "Set CurrentFolderPath",
+																"dependencyConditions": [
+																	"Succeeded"
+																]
+															}
+														],
+														"policy": {
+															"timeout": "7.00:00:00",
+															"retry": 0,
+															"retryIntervalInSeconds": 30,
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"dataset": {
+																"referenceName": "Binary1",
+																"type": "DatasetReference",
+																"parameters": {}
+															},
+															"fieldList": [
+																"childItems"
+															],
+															"storeSettings": {
+																"type": "AzureBlobFSReadSettings",
+																"recursive": true,
+																"enablePartitionDiscovery": false
+															},
+															"formatSettings": {
+																"type": "BinaryReadSettings"
+															}
+														}
+													},
+													{
+														"name": "Insert into queue",
+														"type": "SetVariable",
+														"dependsOn": [
+															{
+																"activity": "Get folder contents",
+																"dependencyConditions": [
+																	"Succeeded"
+																]
+															}
+														],
+														"policy": {
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"variableName": "_tmpQueue",
+															"value": {
+																"value": "@union(take(variables('Queue'),1),activity('Get folder contents').output.childItems,skip(variables('Queue'),1))",
+																"type": "Expression"
+															}
+														}
+													},
+													{
+														"name": "varSwap3",
+														"type": "SetVariable",
+														"dependsOn": [
+															{
+																"activity": "Insert into queue",
+																"dependencyConditions": [
+																	"Succeeded"
+																]
+															}
+														],
+														"policy": {
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"variableName": "Queue",
+															"value": {
+																"value": "@variables('_tmpQueue')",
+																"type": "Expression"
+															}
+														}
+													},
+													{
+														"name": "Set CurrentFolderPath",
+														"type": "SetVariable",
+														"dependsOn": [],
+														"policy": {
+															"secureOutput": false,
+															"secureInput": false
+														},
+														"userProperties": [],
+														"typeProperties": {
+															"variableName": "CurrentFolderPath",
+															"value": {
+																"value": "@variables('Queue')[0].name",
+																"type": "Expression"
+															}
+														}
+													}
+												]
+											}
+										],
+										"defaultActivities": [
+											{
+												"name": "Append file path",
+												"type": "AppendVariable",
+												"dependsOn": [],
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "FilePaths",
+													"value": {
+														"value": "@{variables('CurrentFolderPath')}/@{variables('Queue')[0].name}",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									}
+								},
+								{
+									"name": "Remove queue head",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Process queue head",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "_tmpQueue",
+										"value": {
+											"value": "@skip(variables('Queue'),1)",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "varSwap1",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Remove queue head",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Queue",
+										"value": {
+											"value": "@variables('_tmpQueue')",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"timeout": "7.00:00:00"
+						}
+					},
+					{
+						"name": "Inspect output",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Until queue is empty",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "_tmpQueue",
+							"value": {
+								"value": "@variables('FilePaths')",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"RootPath": {
+						"type": "string",
+						"defaultValue": "/Path/To/Root"
+					}
+				},
+				"variables": {
+					"CurrentFolderPath": {
+						"type": "String"
+					},
+					"Queue": {
+						"type": "Array"
+					},
+					"_tmpQueue": {
+						"type": "Array"
+					},
+					"FilePaths": {
+						"type": "Array"
+					}
+				},
+				"folder": {
+					"name": "tmp"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Binary1')]"
+			]
+		}
+	]
+}
