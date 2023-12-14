@@ -84,7 +84,7 @@
 								},
 								"ifTrueActivities": [
 									{
-										"name": "ActSetVarStudent filename",
+										"name": "ActSetVarStudent Information filename",
 										"type": "SetVariable",
 										"dependsOn": [],
 										"policy": {
@@ -93,7 +93,7 @@
 										},
 										"userProperties": [],
 										"typeProperties": {
-											"variableName": "varStudent_filename",
+											"variableName": "varStudent_Information filename",
 											"value": {
 												"value": "@variables('varForEachDbfsItem')",
 												"type": "Expression"
@@ -107,7 +107,7 @@
 										"onInactiveMarkAs": "Succeeded",
 										"dependsOn": [
 											{
-												"activity": "ActSetVarStudent filename",
+												"activity": "ActSetVarStudent Information filename",
 												"dependencyConditions": [
 													"Succeeded"
 												]
@@ -367,6 +367,9 @@
 				"type": "String"
 			},
 			"var_Questionsdata_filename": {
+				"type": "String"
+			},
+			"varStudent_Information filename": {
 				"type": "String"
 			}
 		},
