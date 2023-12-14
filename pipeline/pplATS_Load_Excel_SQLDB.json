@@ -47,7 +47,7 @@
 				}
 			},
 			{
-				"name": "ForEach1_dbs_item",
+				"name": "ForEach_dbs_item",
 				"type": "ForEach",
 				"dependsOn": [
 					{
@@ -70,7 +70,7 @@
 							"type": "IfCondition",
 							"dependsOn": [
 								{
-									"activity": "ActSetvarfromActForEach",
+									"activity": "SetvarfromActForEach",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -129,7 +129,7 @@
 							}
 						},
 						{
-							"name": "ActSetvarfromActForEach",
+							"name": "SetvarfromActForEach",
 							"type": "SetVariable",
 							"dependsOn": [],
 							"policy": {
@@ -150,7 +150,7 @@
 							"type": "IfCondition",
 							"dependsOn": [
 								{
-									"activity": "ActSetvarfromActForEach",
+									"activity": "SetvarfromActForEach",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -213,7 +213,7 @@
 							"type": "IfCondition",
 							"dependsOn": [
 								{
-									"activity": "ActSetvarfromActForEach",
+									"activity": "SetvarfromActForEach",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -276,7 +276,7 @@
 							"type": "IfCondition",
 							"dependsOn": [
 								{
-									"activity": "ActSetvarfromActForEach",
+									"activity": "SetvarfromActForEach",
 									"dependencyConditions": [
 										"Succeeded"
 									]
