@@ -178,7 +178,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Notebook1",
+						"name": "Notebook - Storage Account Loop All Folders and Files",
 						"type": "DatabricksNotebook",
 						"dependsOn": [],
 						"policy": {
@@ -202,7 +202,7 @@
 						"type": "SetVariable",
 						"dependsOn": [
 							{
-								"activity": "Notebook1",
+								"activity": "Notebook - Storage Account Loop All Folders and Files",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -216,7 +216,7 @@
 						"typeProperties": {
 							"variableName": "varFile_names",
 							"value": {
-								"value": "@activity('Notebook1').output.runOutput",
+								"value": "@activity('Notebook - Storage Account Loop All Folders and Files').output.runOutput",
 								"type": "Expression"
 							}
 						}
