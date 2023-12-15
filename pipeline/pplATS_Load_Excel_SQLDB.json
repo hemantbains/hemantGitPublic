@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Notebook1",
+				"name": "Notebook - Storage Account Loop All Folders and Files",
 				"type": "DatabricksNotebook",
 				"dependsOn": [],
 				"policy": {
@@ -27,7 +27,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "Notebook1",
+						"activity": "Notebook - Storage Account Loop All Folders and Files",
 						"dependencyConditions": [
 							"Succeeded"
 						]
