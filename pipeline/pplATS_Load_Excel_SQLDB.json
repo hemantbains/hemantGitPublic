@@ -41,7 +41,7 @@
 				"typeProperties": {
 					"variableName": "varFile_names",
 					"value": {
-						"value": "@activity('Notebook1').output.runOutput",
+						"value": "@activity('Notebook - Storage Account Loop All Folders and Files').output.runOutput",
 						"type": "Expression"
 					}
 				}
