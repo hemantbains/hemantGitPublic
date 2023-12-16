@@ -91,6 +91,7 @@
 											"secureOutput": false,
 											"secureInput": false
 										},
+										"userProperties": [],
 										"typeProperties": {
 											"variableName": "varStudent_Information filename",
 											"value": {
@@ -326,6 +327,17 @@
 															"name": "File_Source",
 															"type": "String",
 															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "ds_loadtime",
+															"type": "String"
+														},
+														"sink": {
+															"name": "time_stamp",
+															"type": "DateTime",
+															"physicalType": "datetime2"
 														}
 													}
 												],
