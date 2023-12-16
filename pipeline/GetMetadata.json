@@ -117,15 +117,12 @@
 												},
 												"userProperties": [],
 												"typeProperties": {
-													"dataset": {
-														"referenceName": "Binary1",
-														"type": "DatasetReference"
-													},
 													"fieldList": [
 														"childItems"
 													],
 													"storeSettings": {
 														"type": "AzureBlobFSReadSettings",
+														"recursive": true,
 														"enablePartitionDiscovery": false
 													},
 													"formatSettings": {
