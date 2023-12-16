@@ -1,0 +1,86 @@
+{
+	"name": "AzureSqldb_Student_Info",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "sink_AzureSqlDb",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Ending_Date",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Schoology_ID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "First_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Last_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Full_Name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Student_ID_Numnber",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Grade",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Teacher",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Status",
+				"type": "nvarchar"
+			},
+			{
+				"name": "_2019_Absences",
+				"type": "nvarchar"
+			},
+			{
+				"name": "_2020_Absences",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ESE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Free_Reduced_Lunch",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Race",
+				"type": "nvarchar"
+			},
+			{
+				"name": "File_Source",
+				"type": "nvarchar"
+			},
+			{
+				"name": "time_stamp",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "TIMESTAMP",
+				"type": "timestamp"
+			}
+		],
+		"typeProperties": {
+			"schema": "AAOTA",
+			"table": "Student_Info_Staging"
+		}
+	}
+}

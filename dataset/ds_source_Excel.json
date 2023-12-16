@@ -1,0 +1,79 @@
+{
+	"name": "ds_source_Excel",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adlsg2edls_excel",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "_2020-21 - Student Information.xlsx",
+				"folderPath": "Schoology/AAOTA/2021-22/Student Information",
+				"fileSystem": "edls-input"
+			},
+			"sheetIndex": 0,
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "Ending_Date",
+				"type": "String"
+			},
+			{
+				"name": "Schoology_ID",
+				"type": "String"
+			},
+			{
+				"name": "First_Name",
+				"type": "String"
+			},
+			{
+				"name": "Last_Name",
+				"type": "String"
+			},
+			{
+				"name": "Full_Name",
+				"type": "String"
+			},
+			{
+				"name": "Student_ID_Numnber",
+				"type": "String"
+			},
+			{
+				"name": "Grade",
+				"type": "String"
+			},
+			{
+				"name": "Teacher",
+				"type": "String"
+			},
+			{
+				"name": "Status",
+				"type": "String"
+			},
+			{
+				"name": "_2019_Absences",
+				"type": "String"
+			},
+			{
+				"name": "_2020_Absences",
+				"type": "String"
+			},
+			{
+				"name": "ESE",
+				"type": "String"
+			},
+			{
+				"name": "Free_Reduced_Lunch",
+				"type": "String"
+			},
+			{
+				"name": "Race",
+				"type": "String"
+			}
+		]
+	}
+}
