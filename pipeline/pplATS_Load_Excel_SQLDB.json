@@ -327,17 +327,6 @@
 															"type": "String",
 															"physicalType": "nvarchar"
 														}
-													},
-													{
-														"source": {
-															"name": "ds_loadtime",
-															"type": "String"
-														},
-														"sink": {
-															"name": "time_stamp",
-															"type": "DateTime",
-															"physicalType": "datetime2"
-														}
 													}
 												],
 												"typeConversion": true,
