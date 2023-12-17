@@ -6,7 +6,10 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"dspara_filepath": {
+			"dspara_stuinfo_filepath": {
+				"type": "string"
+			},
+			"dspara_stuinfo_filename": {
 				"type": "string"
 			}
 		},
@@ -16,10 +19,13 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "@dataset().dspara_filepath",
+					"value": "@dataset().dspara_stuinfo_filename",
 					"type": "Expression"
 				},
-				"folderPath": "Schoology/AAOTA/2021-22/Student Information",
+				"folderPath": {
+					"value": "@dataset().dspara_stuinfo_filepath",
+					"type": "Expression"
+				},
 				"fileSystem": "edls-input"
 			},
 			"firstRowAsHeader": true

@@ -103,11 +103,15 @@
 									{
 										"name": "Copy Student Info data",
 										"type": "Copy",
-										"state": "Inactive",
-										"onInactiveMarkAs": "Succeeded",
 										"dependsOn": [
 											{
-												"activity": "setvar_chk_birfurcation",
+												"activity": "setvar_pick_bifurcation_path",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											},
+											{
+												"activity": "setvar_pick_bifurcation_filename",
 												"dependencyConditions": [
 													"Succeeded"
 												]
@@ -353,7 +357,17 @@
 										"inputs": [
 											{
 												"referenceName": "ds_source_Excel",
-												"type": "DatasetReference"
+												"type": "DatasetReference",
+												"parameters": {
+													"dspara_stuinfo_filepath": {
+														"value": "@variables('var_pick_bifurcation_path')",
+														"type": "Expression"
+													},
+													"dspara_stuinfo_filename": {
+														"value": "@variables('var_pick_bifurcation_filename')",
+														"type": "Expression"
+													}
+												}
 											}
 										],
 										"outputs": [
@@ -415,7 +429,55 @@
 										"typeProperties": {
 											"variableName": "var_chk_bifurcation",
 											"value": {
-												"value": "@split(activity('Notebook - bifurcate student filepath').output,',')[0]",
+												"value": "@activity('Notebook - bifurcate student filepath').output.runOutput",
+												"type": "Expression"
+											}
+										}
+									},
+									{
+										"name": "setvar_pick_bifurcation_path",
+										"type": "SetVariable",
+										"dependsOn": [
+											{
+												"activity": "setvar_chk_birfurcation",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "var_pick_bifurcation_path",
+											"value": {
+												"value": "@variables('var_chk_bifurcation')[0]",
+												"type": "Expression"
+											}
+										}
+									},
+									{
+										"name": "setvar_pick_bifurcation_filename",
+										"type": "SetVariable",
+										"dependsOn": [
+											{
+												"activity": "setvar_chk_birfurcation",
+												"dependencyConditions": [
+													"Completed"
+												]
+											}
+										],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "var_pick_bifurcation_filename",
+											"value": {
+												"value": "@variables('var_chk_bifurcation')[1]",
 												"type": "Expression"
 											}
 										}
@@ -674,6 +736,15 @@
 				"type": "String"
 			},
 			"var_chk_bifurcation": {
+				"type": "Array"
+			},
+			"chk": {
+				"type": "String"
+			},
+			"var_pick_bifurcation_path": {
+				"type": "String"
+			},
+			"var_pick_bifurcation_filename": {
 				"type": "String"
 			}
 		},
