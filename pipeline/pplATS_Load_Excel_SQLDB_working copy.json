@@ -131,7 +131,10 @@
 												"additionalColumns": [
 													{
 														"name": "ds_filepath",
-														"value": "$$FILEPATH"
+														"value": {
+															"value": "@variables('varStudent_Information filename')",
+															"type": "Expression"
+														}
 													},
 													{
 														"name": "ds_loadtime",
