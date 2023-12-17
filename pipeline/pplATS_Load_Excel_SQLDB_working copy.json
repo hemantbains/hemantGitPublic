@@ -107,7 +107,7 @@
 										"onInactiveMarkAs": "Succeeded",
 										"dependsOn": [
 											{
-												"activity": "Notebook - bifurcate student filepath",
+												"activity": "setvar_chk_birfurcation",
 												"dependencyConditions": [
 													"Succeeded"
 												]
@@ -395,6 +395,30 @@
 											"referenceName": "LS_dbfs2_bifurcate_stu_sourcefilepath",
 											"type": "LinkedServiceReference"
 										}
+									},
+									{
+										"name": "setvar_chk_birfurcation",
+										"type": "SetVariable",
+										"dependsOn": [
+											{
+												"activity": "Notebook - bifurcate student filepath",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "var_chk_bifurcation",
+											"value": {
+												"value": "@split(activity('Notebook - bifurcate student filepath').output,',')[0]",
+												"type": "Expression"
+											}
+										}
 									}
 								]
 							}
@@ -647,6 +671,9 @@
 				"type": "String"
 			},
 			"var_filename": {
+				"type": "String"
+			},
+			"var_chk_bifurcation": {
 				"type": "String"
 			}
 		},
