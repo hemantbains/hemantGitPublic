@@ -103,6 +103,8 @@
 									{
 										"name": "Copy Student Info data",
 										"type": "Copy",
+										"state": "Inactive",
+										"onInactiveMarkAs": "Succeeded",
 										"dependsOn": [
 											{
 												"activity": "Notebook - bifurcate student filepath",
@@ -607,11 +609,6 @@
 				}
 			}
 		],
-		"parameters": {
-			"para_stuinfo_filename": {
-				"type": "string"
-			}
-		},
 		"variables": {
 			"varFile_names": {
 				"type": "Array"
