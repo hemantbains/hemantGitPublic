@@ -1,5 +1,5 @@
 {
-	"name": "pplATS_Load_Excel_SQLDB",
+	"name": "pplATS_Load_Excel_SQLDB_expmt",
 	"properties": {
 		"activities": [
 			{
@@ -351,7 +351,13 @@
 										"inputs": [
 											{
 												"referenceName": "ds_source_Excel",
-												"type": "DatasetReference"
+												"type": "DatasetReference",
+												"parameters": {
+													"dspara_filepath": {
+														"value": "@split(variables('varStudent_Information filename'),'/')[-1]",
+														"type": "Expression"
+													}
+												}
 											}
 										],
 										"outputs": [
@@ -610,7 +616,7 @@
 			}
 		},
 		"folder": {
-			"name": "myPipelines"
+			"name": "myPipelines/Dev_Expmt"
 		},
 		"annotations": []
 	}

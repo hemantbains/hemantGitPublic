@@ -1,5 +1,5 @@
 {
-	"name": "pplATS_Load_Excel_SQLDB",
+	"name": "pplATS_Load_Excel_SQLDB_bkup",
 	"properties": {
 		"activities": [
 			{
@@ -610,7 +610,7 @@
 			}
 		},
 		"folder": {
-			"name": "myPipelines"
+			"name": "myPipelines/myPipelines_bkup"
 		},
 		"annotations": []
 	}

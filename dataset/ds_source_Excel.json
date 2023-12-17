@@ -5,16 +5,23 @@
 			"referenceName": "ls_adlsg2edls_excel",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"dspara_filepath": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "_2020-21 - Student Information.xlsx",
+				"fileName": {
+					"value": "@dataset().dspara_filepath",
+					"type": "Expression"
+				},
 				"folderPath": "Schoology/AAOTA/2021-22/Student Information",
 				"fileSystem": "edls-input"
 			},
-			"sheetIndex": 0,
 			"firstRowAsHeader": true
 		},
 		"schema": [

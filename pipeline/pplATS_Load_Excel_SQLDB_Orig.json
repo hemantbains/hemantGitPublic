@@ -110,7 +110,7 @@
 			}
 		},
 		"folder": {
-			"name": "tmp/myPipelines/Expmt"
+			"name": "myPipelines/Dev_Expmt"
 		},
 		"annotations": []
 	}
