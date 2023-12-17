@@ -15,6 +15,18 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'LS_AzureDatabricks1'"
 		},
+		"LS_dbfs2_bifurcate_stu_sourcefilepath_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'LS_dbfs2_bifurcate_stu_sourcefilepath'"
+		},
+		"ls_adlsg2edls_excel_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_adlsg2edls_excel'"
+		},
+		"sink_AzureSqlDb_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'sink_AzureSqlDb'"
+		},
 		"LS_ADLSg2_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://adlsg2edls.dfs.core.windows.net/"
@@ -22,6 +34,14 @@
 		"LS_AzureDatabricks1_properties_typeProperties_existingClusterId": {
 			"type": "string",
 			"defaultValue": "1212-065554-24xhgg4x"
+		},
+		"LS_dbfs2_bifurcate_stu_sourcefilepath_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "1212-065554-24xhgg4x"
+		},
+		"ls_adlsg2edls_excel_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsg2edls.dfs.core.windows.net/"
 		}
 	},
 	"variables": {
@@ -64,7 +84,55 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pplATS_01_Load_Excel_SQLDB')]",
+			"name": "[concat(parameters('factoryName'), '/LS_dbfs2_bifurcate_stu_sourcefilepath')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://adb-8088961883452051.11.azuredatabricks.net",
+					"accessToken": {
+						"type": "SecureString",
+						"value": "[parameters('LS_dbfs2_bifurcate_stu_sourcefilepath_accessToken')]"
+					},
+					"existingClusterId": "[parameters('LS_dbfs2_bifurcate_stu_sourcefilepath_properties_typeProperties_existingClusterId')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_adlsg2edls_excel')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_adlsg2edls_excel_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ls_adlsg2edls_excel_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sink_AzureSqlDb')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('sink_AzureSqlDb_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pplATS_Load_Excel_SQLDB_Orig')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -90,7 +158,7 @@
 						}
 					},
 					{
-						"name": "Set variable1",
+						"name": "Set var output of dbfs",
 						"type": "SetVariable",
 						"dependsOn": [
 							{
@@ -106,9 +174,9 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"variableName": "File_names",
+							"variableName": "varFile_names",
 							"value": {
-								"value": "@activity('Notebook1').output.runOutput",
+								"value": "@activity('Notebook1').output.runoutput",
 								"type": "Expression"
 							}
 						}
@@ -116,19 +184,24 @@
 					{
 						"name": "ForEach1",
 						"type": "ForEach",
-						"state": "Inactive",
-						"onInactiveMarkAs": "Succeeded",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "Set var output of dbfs",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@variables('File_names')",
+								"value": "@variables('varFile_names')",
 								"type": "Expression"
 							},
 							"isSequential": true,
 							"activities": [
 								{
-									"name": "Set variable3",
+									"name": "Set variable1",
 									"type": "SetVariable",
 									"dependsOn": [],
 									"policy": {
@@ -137,9 +210,9 @@
 									},
 									"userProperties": [],
 									"typeProperties": {
-										"variableName": "sum",
+										"variableName": "chk",
 										"value": {
-											"value": "@concat(item())",
+											"value": "@item()",
 											"type": "Expression"
 										}
 									}
@@ -152,18 +225,30 @@
 					"elapsedTimeMetric": {}
 				},
 				"variables": {
-					"File_names": {
+					"varFile_names": {
 						"type": "Array"
 					},
 					"chk": {
 						"type": "String"
 					},
-					"sum": {
+					"varOtherthanStudent": {
+						"type": "String"
+					},
+					"var_if_OtherThanStudentfilename": {
+						"type": "String"
+					},
+					"varStudent_filename": {
+						"type": "String"
+					},
+					"varOtherthanStudentfilename": {
+						"type": "String"
+					},
+					"varForEachDbfsItem": {
 						"type": "String"
 					}
 				},
 				"folder": {
-					"name": "tmp/myPipelines/Expmt"
+					"name": "myPipelines/myPipelines_bkup"
 				},
 				"annotations": []
 			},
@@ -172,7 +257,196 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pplATS_Load_Excel_SQLDB')]",
+			"name": "[concat(parameters('factoryName'), '/AzureSqldb_Student_Info')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "sink_AzureSqlDb",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Ending_Date",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Schoology_ID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "First_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Last_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Full_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Student_ID_Numnber",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Grade",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Teacher",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Status",
+						"type": "nvarchar"
+					},
+					{
+						"name": "_2019_Absences",
+						"type": "nvarchar"
+					},
+					{
+						"name": "_2020_Absences",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ESE",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Free_Reduced_Lunch",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Race",
+						"type": "nvarchar"
+					},
+					{
+						"name": "File_Source",
+						"type": "nvarchar"
+					},
+					{
+						"name": "time_stamp",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "TIMESTAMP",
+						"type": "timestamp"
+					}
+				],
+				"typeProperties": {
+					"schema": "AAOTA",
+					"table": "Student_Info_Staging"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/sink_AzureSqlDb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_source_Excel')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adlsg2edls_excel",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"dspara_stuinfo_filepath": {
+						"type": "string"
+					},
+					"dspara_stuinfo_filename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Sheet1",
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().dspara_stuinfo_filename",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().dspara_stuinfo_filepath",
+							"type": "Expression"
+						},
+						"fileSystem": "edls-input"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "Ending_Date",
+						"type": "String"
+					},
+					{
+						"name": "Schoology_ID",
+						"type": "String"
+					},
+					{
+						"name": "First_Name",
+						"type": "String"
+					},
+					{
+						"name": "Last_Name",
+						"type": "String"
+					},
+					{
+						"name": "Full_Name",
+						"type": "String"
+					},
+					{
+						"name": "Student_ID_Numnber",
+						"type": "String"
+					},
+					{
+						"name": "Grade",
+						"type": "String"
+					},
+					{
+						"name": "Teacher",
+						"type": "String"
+					},
+					{
+						"name": "Status",
+						"type": "String"
+					},
+					{
+						"name": "_2019_Absences",
+						"type": "String"
+					},
+					{
+						"name": "_2020_Absences",
+						"type": "String"
+					},
+					{
+						"name": "ESE",
+						"type": "String"
+					},
+					{
+						"name": "Free_Reduced_Lunch",
+						"type": "String"
+					},
+					{
+						"name": "Race",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adlsg2edls_excel')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pplATS_Load_Excel_SQLDB_final')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -276,10 +550,289 @@
 												}
 											},
 											{
-												"name": "Copy Students Data",
+												"name": "Copy Student Info data",
 												"type": "Copy",
-												"state": "Inactive",
-												"onInactiveMarkAs": "Succeeded",
+												"dependsOn": [
+													{
+														"activity": "setvar_pick_bifurcation_path",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													},
+													{
+														"activity": "setvar_pick_bifurcation_filename",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "ExcelSource",
+														"additionalColumns": [
+															{
+																"name": "ds_filepath",
+																"value": {
+																	"value": "@variables('varStudent_Information filename')",
+																	"type": "Expression"
+																}
+															},
+															{
+																"name": "ds_loadtime",
+																"value": {
+																	"value": "@utcnow()",
+																	"type": "Expression"
+																}
+															}
+														],
+														"storeSettings": {
+															"type": "AzureBlobFSReadSettings",
+															"recursive": false,
+															"enablePartitionDiscovery": false
+														}
+													},
+													"sink": {
+														"type": "AzureSqlSink",
+														"writeBehavior": "insert",
+														"sqlWriterUseTableLock": false
+													},
+													"enableStaging": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"mappings": [
+															{
+																"source": {
+																	"name": "Ending_Date",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Ending_Date",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "Schoology_ID",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Schoology_ID",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "First_Name",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "First_Name",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "Last_Name",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Last_Name",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "Full_Name",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Full_Name",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "Student_ID_Numnber",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Student_ID_Numnber",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "Grade",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Grade",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "Teacher",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Teacher",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "Status",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Status",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "_2019_Absences",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "_2019_Absences",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "_2020_Absences",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "_2020_Absences",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "ESE",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "ESE",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "Free_Reduced_Lunch",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Free_Reduced_Lunch",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "Race",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Race",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "ds_filepath",
+																	"type": "String"
+																},
+																"sink": {
+																	"name": "File_Source",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "ds_loadtime",
+																	"type": "String"
+																},
+																"sink": {
+																	"name": "time_stamp",
+																	"type": "DateTime",
+																	"physicalType": "datetime2"
+																}
+															}
+														],
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
+												},
+												"inputs": [
+													{
+														"referenceName": "ds_source_Excel",
+														"type": "DatasetReference",
+														"parameters": {
+															"dspara_stuinfo_filepath": {
+																"value": "@variables('var_pick_bifurcation_path')",
+																"type": "Expression"
+															},
+															"dspara_stuinfo_filename": {
+																"value": "@variables('var_pick_bifurcation_filename')",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "AzureSqldb_Student_Info",
+														"type": "DatasetReference",
+														"parameters": {}
+													}
+												]
+											},
+											{
+												"name": "Notebook - bifurcate student filepath",
+												"type": "DatabricksNotebook",
 												"dependsOn": [
 													{
 														"activity": "ActSetVarStudent Information filename",
@@ -297,7 +850,89 @@
 												},
 												"userProperties": [],
 												"typeProperties": {
-													"enableStaging": false
+													"notebookPath": "/Users/hemant@insightanalytics.us/Ats_Edls/Notebook_bifurcate_file_sourcename",
+													"baseParameters": {
+														"para_dbfs_activity_stu_filename": {
+															"value": "@variables('varStudent_Information filename')",
+															"type": "Expression"
+														}
+													}
+												},
+												"linkedServiceName": {
+													"referenceName": "LS_dbfs2_bifurcate_stu_sourcefilepath",
+													"type": "LinkedServiceReference"
+												}
+											},
+											{
+												"name": "setvar_chk_birfurcation",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "Notebook - bifurcate student filepath",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_chk_bifurcation",
+													"value": {
+														"value": "@activity('Notebook - bifurcate student filepath').output.runOutput",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "setvar_pick_bifurcation_path",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "setvar_chk_birfurcation",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_pick_bifurcation_path",
+													"value": {
+														"value": "@variables('var_chk_bifurcation')[0]",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "setvar_pick_bifurcation_filename",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "setvar_chk_birfurcation",
+														"dependencyConditions": [
+															"Completed"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_pick_bifurcation_filename",
+													"value": {
+														"value": "@variables('var_chk_bifurcation')[1]",
+														"type": "Expression"
+													}
 												}
 											}
 										]
@@ -549,25 +1184,46 @@
 					},
 					"varStudent_Information filename": {
 						"type": "String"
+					},
+					"var_filepath": {
+						"type": "String"
+					},
+					"var_filename": {
+						"type": "String"
+					},
+					"var_chk_bifurcation": {
+						"type": "Array"
+					},
+					"chk": {
+						"type": "String"
+					},
+					"var_pick_bifurcation_path": {
+						"type": "String"
+					},
+					"var_pick_bifurcation_filename": {
+						"type": "String"
 					}
 				},
 				"folder": {
-					"name": "tmp/myPipelines/Working"
+					"name": "myPipelines"
 				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureDatabricks1')]"
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureDatabricks1')]",
+				"[concat(variables('factoryId'), '/datasets/ds_source_Excel')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqldb_Student_Info')]",
+				"[concat(variables('factoryId'), '/linkedServices/LS_dbfs2_bifurcate_stu_sourcefilepath')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pplATS_Load_Excel_SQLDB_Orig')]",
+			"name": "[concat(parameters('factoryName'), '/pplATS_Load_Excel_SQLDB_working copy')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Notebook1",
+						"name": "Notebook - Storage Account Loop All Folders and Files",
 						"type": "DatabricksNotebook",
 						"dependsOn": [],
 						"policy": {
@@ -587,11 +1243,11 @@
 						}
 					},
 					{
-						"name": "Set var output of dbfs",
+						"name": "ActSetVarDBFSoutput",
 						"type": "SetVariable",
 						"dependsOn": [
 							{
-								"activity": "Notebook1",
+								"activity": "Notebook - Storage Account Loop All Folders and Files",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -605,17 +1261,17 @@
 						"typeProperties": {
 							"variableName": "varFile_names",
 							"value": {
-								"value": "@activity('Notebook1').output.runoutput",
+								"value": "@activity('Notebook - Storage Account Loop All Folders and Files').output.runOutput",
 								"type": "Expression"
 							}
 						}
 					},
 					{
-						"name": "ForEach1",
+						"name": "ForEach_dbs_item",
 						"type": "ForEach",
 						"dependsOn": [
 							{
-								"activity": "Set var output of dbfs",
+								"activity": "ActSetVarDBFSoutput",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -630,7 +1286,431 @@
 							"isSequential": true,
 							"activities": [
 								{
-									"name": "Set variable1",
+									"name": "If Condition Student Information",
+									"type": "IfCondition",
+									"dependsOn": [
+										{
+											"activity": "SetvarfromActForEach",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"expression": {
+											"value": "@contains(variables('varForEachDbfsItem'),'Student Information')",
+											"type": "Expression"
+										},
+										"ifTrueActivities": [
+											{
+												"name": "ActSetVarStudent Information filename",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "varStudent_Information filename",
+													"value": {
+														"value": "@variables('varForEachDbfsItem')",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "Copy Student Info data",
+												"type": "Copy",
+												"dependsOn": [
+													{
+														"activity": "setvar_pick_bifurcation_path",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													},
+													{
+														"activity": "setvar_pick_bifurcation_filename",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "ExcelSource",
+														"additionalColumns": [
+															{
+																"name": "ds_filepath",
+																"value": {
+																	"value": "@variables('varStudent_Information filename')",
+																	"type": "Expression"
+																}
+															},
+															{
+																"name": "ds_loadtime",
+																"value": {
+																	"value": "@utcnow()",
+																	"type": "Expression"
+																}
+															}
+														],
+														"storeSettings": {
+															"type": "AzureBlobFSReadSettings",
+															"recursive": false,
+															"enablePartitionDiscovery": false
+														}
+													},
+													"sink": {
+														"type": "AzureSqlSink",
+														"writeBehavior": "insert",
+														"sqlWriterUseTableLock": false
+													},
+													"enableStaging": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"mappings": [
+															{
+																"source": {
+																	"name": "Ending_Date",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Ending_Date",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "Schoology_ID",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Schoology_ID",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "First_Name",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "First_Name",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "Last_Name",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Last_Name",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "Full_Name",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Full_Name",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "Student_ID_Numnber",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Student_ID_Numnber",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "Grade",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Grade",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "Teacher",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Teacher",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "Status",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Status",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "_2019_Absences",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "_2019_Absences",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "_2020_Absences",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "_2020_Absences",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "ESE",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "ESE",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "Free_Reduced_Lunch",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Free_Reduced_Lunch",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "Race",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Race",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "ds_filepath",
+																	"type": "String"
+																},
+																"sink": {
+																	"name": "File_Source",
+																	"type": "String",
+																	"physicalType": "nvarchar"
+																}
+															},
+															{
+																"source": {
+																	"name": "ds_loadtime",
+																	"type": "String"
+																},
+																"sink": {
+																	"name": "time_stamp",
+																	"type": "DateTime",
+																	"physicalType": "datetime2"
+																}
+															}
+														],
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
+												},
+												"inputs": [
+													{
+														"referenceName": "ds_source_Excel",
+														"type": "DatasetReference",
+														"parameters": {
+															"dspara_stuinfo_filepath": {
+																"value": "@variables('var_pick_bifurcation_path')",
+																"type": "Expression"
+															},
+															"dspara_stuinfo_filename": {
+																"value": "@variables('var_pick_bifurcation_filename')",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "AzureSqldb_Student_Info",
+														"type": "DatasetReference",
+														"parameters": {}
+													}
+												]
+											},
+											{
+												"name": "Notebook - bifurcate student filepath",
+												"type": "DatabricksNotebook",
+												"dependsOn": [
+													{
+														"activity": "ActSetVarStudent Information filename",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"notebookPath": "/Users/hemant@insightanalytics.us/Ats_Edls/Notebook_bifurcate_file_sourcename",
+													"baseParameters": {
+														"para_dbfs_activity_stu_filename": {
+															"value": "@variables('varStudent_Information filename')",
+															"type": "Expression"
+														}
+													}
+												},
+												"linkedServiceName": {
+													"referenceName": "LS_dbfs2_bifurcate_stu_sourcefilepath",
+													"type": "LinkedServiceReference"
+												}
+											},
+											{
+												"name": "setvar_chk_birfurcation",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "Notebook - bifurcate student filepath",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_chk_bifurcation",
+													"value": {
+														"value": "@activity('Notebook - bifurcate student filepath').output.runOutput",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "setvar_pick_bifurcation_path",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "setvar_chk_birfurcation",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_pick_bifurcation_path",
+													"value": {
+														"value": "@variables('var_chk_bifurcation')[0]",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "setvar_pick_bifurcation_filename",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "setvar_chk_birfurcation",
+														"dependencyConditions": [
+															"Completed"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_pick_bifurcation_filename",
+													"value": {
+														"value": "@variables('var_chk_bifurcation')[1]",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									}
+								},
+								{
+									"name": "SetvarfromActForEach",
 									"type": "SetVariable",
 									"dependsOn": [],
 									"policy": {
@@ -639,11 +1719,200 @@
 									},
 									"userProperties": [],
 									"typeProperties": {
-										"variableName": "chk",
+										"variableName": "varForEachDbfsItem",
 										"value": {
 											"value": "@item()",
 											"type": "Expression"
 										}
+									}
+								},
+								{
+									"name": "If Condition to load SubmissionSummary file",
+									"type": "IfCondition",
+									"dependsOn": [
+										{
+											"activity": "SetvarfromActForEach",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"expression": {
+											"value": "@contains(variables('varForEachDbfsItem'),'Submission-Summary')",
+											"type": "Expression"
+										},
+										"ifTrueActivities": [
+											{
+												"name": "ActSetVarSubmissionSummary_filename",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_SubmissionSummary_filename",
+													"value": {
+														"value": "@variables('varForEachDbfsItem')",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "Copy data_ Student Summary",
+												"type": "Copy",
+												"state": "Inactive",
+												"onInactiveMarkAs": "Succeeded",
+												"dependsOn": [
+													{
+														"activity": "ActSetVarSubmissionSummary_filename",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"enableStaging": false
+												}
+											}
+										]
+									}
+								},
+								{
+									"name": "If Condition to load file Student Submission",
+									"type": "IfCondition",
+									"dependsOn": [
+										{
+											"activity": "SetvarfromActForEach",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"expression": {
+											"value": "@contains(variables('varForEachDbfsItem'),'Student-Submissions')",
+											"type": "Expression"
+										},
+										"ifTrueActivities": [
+											{
+												"name": "ActSetVarStudentSubmission",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_SubmissionSubmission_filename",
+													"value": {
+														"value": "@variables('varForEachDbfsItem')",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "Copy data_ Student Submission",
+												"type": "Copy",
+												"state": "Inactive",
+												"onInactiveMarkAs": "Succeeded",
+												"dependsOn": [
+													{
+														"activity": "ActSetVarStudentSubmission",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"enableStaging": false
+												}
+											}
+										]
+									}
+								},
+								{
+									"name": "If Condition to load Questions data",
+									"type": "IfCondition",
+									"dependsOn": [
+										{
+											"activity": "SetvarfromActForEach",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"expression": {
+											"value": "@contains(variables('varForEachDbfsItem'),'Question-Data')",
+											"type": "Expression"
+										},
+										"ifTrueActivities": [
+											{
+												"name": "ActSetVarQuestionsdata_file",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_Questionsdata_filename",
+													"value": {
+														"value": "@variables('varForEachDbfsItem')",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "Copy data - Question Data",
+												"type": "Copy",
+												"state": "Inactive",
+												"onInactiveMarkAs": "Succeeded",
+												"dependsOn": [
+													{
+														"activity": "ActSetVarQuestionsdata_file",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"enableStaging": false
+												}
+											}
+										]
 									}
 								}
 							]
@@ -657,15 +1926,6 @@
 					"varFile_names": {
 						"type": "Array"
 					},
-					"chk": {
-						"type": "String"
-					},
-					"varOtherthanStudent": {
-						"type": "String"
-					},
-					"var_if_OtherThanStudentfilename": {
-						"type": "String"
-					},
 					"varStudent_filename": {
 						"type": "String"
 					},
@@ -674,394 +1934,57 @@
 					},
 					"varForEachDbfsItem": {
 						"type": "String"
-					}
-				},
-				"folder": {
-					"name": "tmp/myPipelines/Expmt"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureDatabricks1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Binary1')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_ADLSg2",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Binary",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "Path",
-						"fileSystem": "edls-input"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_ADLSg2')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Binary2')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_ADLSg2",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Binary",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "Schoology",
-						"fileSystem": "edls-input"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_ADLSg2')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/GetMetadata')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Initialise queue",
-						"type": "SetVariable",
-						"dependsOn": [],
-						"policy": {
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "Queue",
-							"value": {
-								"value": "@json(concat('[{\"type\":\"Path\",\"name\":\"',pipeline().parameters.RootPath,'\"}]'))",
-								"type": "Expression"
-							}
-						}
 					},
-					{
-						"name": "Until queue is empty",
-						"type": "Until",
-						"dependsOn": [
-							{
-								"activity": "Initialise queue",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"expression": {
-								"value": "@equals(length(variables('Queue')),0)",
-								"type": "Expression"
-							},
-							"activities": [
-								{
-									"name": "Process queue head",
-									"type": "Switch",
-									"dependsOn": [],
-									"userProperties": [],
-									"typeProperties": {
-										"on": {
-											"value": "@variables('Queue')[0].type",
-											"type": "Expression"
-										},
-										"cases": [
-											{
-												"value": "Folder",
-												"activities": [
-													{
-														"name": "Append folder path",
-														"type": "SetVariable",
-														"dependsOn": [],
-														"policy": {
-															"secureOutput": false,
-															"secureInput": false
-														},
-														"userProperties": [],
-														"typeProperties": {
-															"variableName": "_tmpQueue",
-															"value": {
-																"value": "@union(variables('Queue'),json(concat('[{\"type\":\"Path\",\"name\":\"',variables('CurrentFolderPath'),'/',variables('Queue')[0].name,'\"}]')))",
-																"type": "Expression"
-															}
-														}
-													},
-													{
-														"name": "varSwap2",
-														"type": "SetVariable",
-														"dependsOn": [
-															{
-																"activity": "Append folder path",
-																"dependencyConditions": [
-																	"Succeeded"
-																]
-															}
-														],
-														"policy": {
-															"secureOutput": false,
-															"secureInput": false
-														},
-														"userProperties": [],
-														"typeProperties": {
-															"variableName": "Queue",
-															"value": {
-																"value": "@variables('_tmpQueue')",
-																"type": "Expression"
-															}
-														}
-													}
-												]
-											},
-											{
-												"value": "Path",
-												"activities": [
-													{
-														"name": "Get folder contents",
-														"type": "GetMetadata",
-														"dependsOn": [
-															{
-																"activity": "Set CurrentFolderPath",
-																"dependencyConditions": [
-																	"Succeeded"
-																]
-															}
-														],
-														"policy": {
-															"timeout": "7.00:00:00",
-															"retry": 0,
-															"retryIntervalInSeconds": 30,
-															"secureOutput": false,
-															"secureInput": false
-														},
-														"userProperties": [],
-														"typeProperties": {
-															"dataset": {
-																"referenceName": "Binary1",
-																"type": "DatasetReference",
-																"parameters": {}
-															},
-															"fieldList": [
-																"childItems"
-															],
-															"storeSettings": {
-																"type": "AzureBlobFSReadSettings",
-																"recursive": true,
-																"enablePartitionDiscovery": false
-															},
-															"formatSettings": {
-																"type": "BinaryReadSettings"
-															}
-														}
-													},
-													{
-														"name": "Insert into queue",
-														"type": "SetVariable",
-														"dependsOn": [
-															{
-																"activity": "Get folder contents",
-																"dependencyConditions": [
-																	"Succeeded"
-																]
-															}
-														],
-														"policy": {
-															"secureOutput": false,
-															"secureInput": false
-														},
-														"userProperties": [],
-														"typeProperties": {
-															"variableName": "_tmpQueue",
-															"value": {
-																"value": "@union(take(variables('Queue'),1),activity('Get folder contents').output.childItems,skip(variables('Queue'),1))",
-																"type": "Expression"
-															}
-														}
-													},
-													{
-														"name": "varSwap3",
-														"type": "SetVariable",
-														"dependsOn": [
-															{
-																"activity": "Insert into queue",
-																"dependencyConditions": [
-																	"Succeeded"
-																]
-															}
-														],
-														"policy": {
-															"secureOutput": false,
-															"secureInput": false
-														},
-														"userProperties": [],
-														"typeProperties": {
-															"variableName": "Queue",
-															"value": {
-																"value": "@variables('_tmpQueue')",
-																"type": "Expression"
-															}
-														}
-													},
-													{
-														"name": "Set CurrentFolderPath",
-														"type": "SetVariable",
-														"dependsOn": [],
-														"policy": {
-															"secureOutput": false,
-															"secureInput": false
-														},
-														"userProperties": [],
-														"typeProperties": {
-															"variableName": "CurrentFolderPath",
-															"value": {
-																"value": "@variables('Queue')[0].name",
-																"type": "Expression"
-															}
-														}
-													}
-												]
-											}
-										],
-										"defaultActivities": [
-											{
-												"name": "Append file path",
-												"type": "AppendVariable",
-												"dependsOn": [],
-												"userProperties": [],
-												"typeProperties": {
-													"variableName": "FilePaths",
-													"value": {
-														"value": "@{variables('CurrentFolderPath')}/@{variables('Queue')[0].name}",
-														"type": "Expression"
-													}
-												}
-											}
-										]
-									}
-								},
-								{
-									"name": "Remove queue head",
-									"type": "SetVariable",
-									"dependsOn": [
-										{
-											"activity": "Process queue head",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"policy": {
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"variableName": "_tmpQueue",
-										"value": {
-											"value": "@skip(variables('Queue'),1)",
-											"type": "Expression"
-										}
-									}
-								},
-								{
-									"name": "varSwap1",
-									"type": "SetVariable",
-									"dependsOn": [
-										{
-											"activity": "Remove queue head",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"policy": {
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"variableName": "Queue",
-										"value": {
-											"value": "@variables('_tmpQueue')",
-											"type": "Expression"
-										}
-									}
-								}
-							],
-							"timeout": "7.00:00:00"
-						}
-					},
-					{
-						"name": "Inspect output",
-						"type": "SetVariable",
-						"dependsOn": [
-							{
-								"activity": "Until queue is empty",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "_tmpQueue",
-							"value": {
-								"value": "@variables('FilePaths')",
-								"type": "Expression"
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"parameters": {
-					"RootPath": {
-						"type": "string",
-						"defaultValue": "/Path/To/Root"
-					}
-				},
-				"variables": {
-					"CurrentFolderPath": {
+					"varQuesdataFilename": {
 						"type": "String"
 					},
-					"Queue": {
+					"varOtherthanQuesfilename": {
+						"type": "String"
+					},
+					"VarStudentSummaryFilename": {
+						"type": "String"
+					},
+					"var_SubmissionSummary_filename": {
+						"type": "String"
+					},
+					"var_SubmissionSubmission_filename": {
+						"type": "String"
+					},
+					"var_Questionsdata_filename": {
+						"type": "String"
+					},
+					"varStudent_Information filename": {
+						"type": "String"
+					},
+					"var_filepath": {
+						"type": "String"
+					},
+					"var_filename": {
+						"type": "String"
+					},
+					"var_chk_bifurcation": {
 						"type": "Array"
 					},
-					"_tmpQueue": {
-						"type": "Array"
+					"chk": {
+						"type": "String"
 					},
-					"FilePaths": {
-						"type": "Array"
+					"var_pick_bifurcation_path": {
+						"type": "String"
+					},
+					"var_pick_bifurcation_filename": {
+						"type": "String"
 					}
 				},
 				"folder": {
-					"name": "tmp"
+					"name": "myPipelines/Working"
 				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/Binary1')]"
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureDatabricks1')]",
+				"[concat(variables('factoryId'), '/datasets/ds_source_Excel')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqldb_Student_Info')]",
+				"[concat(variables('factoryId'), '/linkedServices/LS_dbfs2_bifurcate_stu_sourcefilepath')]"
 			]
 		}
 	]

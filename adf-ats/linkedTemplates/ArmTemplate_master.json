@@ -15,6 +15,18 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'LS_AzureDatabricks1'"
 		},
+		"LS_dbfs2_bifurcate_stu_sourcefilepath_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'LS_dbfs2_bifurcate_stu_sourcefilepath'"
+		},
+		"ls_adlsg2edls_excel_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_adlsg2edls_excel'"
+		},
+		"sink_AzureSqlDb_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'sink_AzureSqlDb'"
+		},
 		"LS_ADLSg2_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://adlsg2edls.dfs.core.windows.net/"
@@ -22,6 +34,14 @@
 		"LS_AzureDatabricks1_properties_typeProperties_existingClusterId": {
 			"type": "string",
 			"defaultValue": "1212-065554-24xhgg4x"
+		},
+		"LS_dbfs2_bifurcate_stu_sourcefilepath_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "1212-065554-24xhgg4x"
+		},
+		"ls_adlsg2edls_excel_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsg2edls.dfs.core.windows.net/"
 		},
 		"containerUri": {
 			"type": "string",
@@ -56,11 +76,26 @@
 					"LS_AzureDatabricks1_accessToken": {
 						"value": "[parameters('LS_AzureDatabricks1_accessToken')]"
 					},
+					"LS_dbfs2_bifurcate_stu_sourcefilepath_accessToken": {
+						"value": "[parameters('LS_dbfs2_bifurcate_stu_sourcefilepath_accessToken')]"
+					},
+					"ls_adlsg2edls_excel_accountKey": {
+						"value": "[parameters('ls_adlsg2edls_excel_accountKey')]"
+					},
+					"sink_AzureSqlDb_connectionString": {
+						"value": "[parameters('sink_AzureSqlDb_connectionString')]"
+					},
 					"LS_ADLSg2_properties_typeProperties_url": {
 						"value": "[parameters('LS_ADLSg2_properties_typeProperties_url')]"
 					},
 					"LS_AzureDatabricks1_properties_typeProperties_existingClusterId": {
 						"value": "[parameters('LS_AzureDatabricks1_properties_typeProperties_existingClusterId')]"
+					},
+					"LS_dbfs2_bifurcate_stu_sourcefilepath_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('LS_dbfs2_bifurcate_stu_sourcefilepath_properties_typeProperties_existingClusterId')]"
+					},
+					"ls_adlsg2edls_excel_properties_typeProperties_url": {
+						"value": "[parameters('ls_adlsg2edls_excel_properties_typeProperties_url')]"
 					}
 				}
 			},
