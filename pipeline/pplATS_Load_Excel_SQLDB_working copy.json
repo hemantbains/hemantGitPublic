@@ -359,7 +359,7 @@
 										},
 										"inputs": [
 											{
-												"referenceName": "ds_source_Excel",
+												"referenceName": "ds_source_Excel_Student_info",
 												"type": "DatasetReference",
 												"parameters": {
 													"dspara_stuinfo_filepath": {
@@ -541,10 +541,57 @@
 										}
 									},
 									{
-										"name": "Copy data_ Student Summary",
+										"name": "Copy data_ SubmisionSummary",
 										"type": "Copy",
-										"state": "Inactive",
-										"onInactiveMarkAs": "Succeeded",
+										"dependsOn": [
+											{
+												"activity": "setvar_pick_bifurcation_sub_smry_path",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											},
+											{
+												"activity": "setvar_pick_bifurcation_filename_subSmry",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "ExcelSource",
+												"storeSettings": {
+													"type": "AzureBlobFSReadSettings",
+													"recursive": true,
+													"enablePartitionDiscovery": false
+												}
+											},
+											"enableStaging": false
+										},
+										"inputs": [
+											{
+												"referenceName": "ds_source_Excel_SubSmry",
+												"type": "DatasetReference",
+												"parameters": {
+													"dspara_SubSmry_filename": {
+														"value": "@variables('var_pick_bifurcation_filename_subSmry')",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									},
+									{
+										"name": "Notebook - bifurcate SubSmry Data filepath",
+										"type": "DatabricksNotebook",
 										"dependsOn": [
 											{
 												"activity": "ActSetVarSubmissionSummary_filename",
@@ -562,7 +609,89 @@
 										},
 										"userProperties": [],
 										"typeProperties": {
-											"enableStaging": false
+											"notebookPath": "/Users/hemant@insightanalytics.us/Ats_Edls/Notebook_bifurcate_Sub_Summary_file_sourcename",
+											"baseParameters": {
+												"para_dbfs_activity_sub_smry_filename": {
+													"value": "@variables('var_SubmissionSummary_filename')",
+													"type": "Expression"
+												}
+											}
+										},
+										"linkedServiceName": {
+											"referenceName": "LS_Dbfs_bifurcate_SubSmry_filesource_name",
+											"type": "LinkedServiceReference"
+										}
+									},
+									{
+										"name": "setvar_chk_birfurcation_dbfs_output_SubSmry",
+										"type": "SetVariable",
+										"dependsOn": [
+											{
+												"activity": "Notebook - bifurcate SubSmry Data filepath",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "var_chk_bifurcation_subSmry",
+											"value": {
+												"value": "@activity('Notebook - bifurcate SubSmry Data filepath').output.runOutput",
+												"type": "Expression"
+											}
+										}
+									},
+									{
+										"name": "setvar_pick_bifurcation_sub_smry_path",
+										"type": "SetVariable",
+										"dependsOn": [
+											{
+												"activity": "setvar_chk_birfurcation_dbfs_output_SubSmry",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "var_pick_bifurcation_path_subSmry",
+											"value": {
+												"value": "@variables('var_chk_bifurcation_subSmry')[0]",
+												"type": "Expression"
+											}
+										}
+									},
+									{
+										"name": "setvar_pick_bifurcation_filename_subSmry",
+										"type": "SetVariable",
+										"dependsOn": [
+											{
+												"activity": "setvar_chk_birfurcation_dbfs_output_SubSmry",
+												"dependencyConditions": [
+													"Completed"
+												]
+											}
+										],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "var_pick_bifurcation_filename_subSmry",
+											"value": {
+												"value": "@variables('var_chk_bifurcation_subSmry')[1]",
+												"type": "Expression"
+											}
 										}
 									}
 								]
@@ -748,6 +877,15 @@
 				"type": "String"
 			},
 			"var_pick_bifurcation_filename": {
+				"type": "String"
+			},
+			"var_chk_bifurcation_subSmry": {
+				"type": "Array"
+			},
+			"var_pick_bifurcation_filename_subSmry": {
+				"type": "String"
+			},
+			"var_pick_bifurcation_path_subSmry": {
 				"type": "String"
 			}
 		},

@@ -1,0 +1,32 @@
+{
+	"name": "ds_source_Excel_SubSmry",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adlsg2edls_excel_SubSmry",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"dspara_SubSmry_filename": {
+				"type": "string"
+			},
+			"dspara_SubSmry_filepath": {
+				"type": "string",
+				"defaultValue": "abc"
+			}
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().dspara_SubSmry_filename",
+					"type": "Expression"
+				},
+				"fileSystem": "edls-input"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}

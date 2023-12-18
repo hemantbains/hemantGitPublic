@@ -1,5 +1,5 @@
 {
-	"name": "ds_source_Excel",
+	"name": "ds_source_Excel_Student_info",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_adlsg2edls_excel",
