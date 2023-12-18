@@ -17,16 +17,124 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
+			"sheetName": "Sheet1",
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": {
-					"value": "@dataset().dspara_SubSmry_filename",
-					"type": "Expression"
-				},
+				"fileName": "Submission-Summary-Unit-5-Lesson-22-2022-04-10-213323.xlsx",
+				"folderPath": "Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 2",
 				"fileSystem": "edls-input"
 			},
 			"firstRowAsHeader": true
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "Schoology_ID",
+				"type": "String"
+			},
+			{
+				"name": "First_Name",
+				"type": "String"
+			},
+			{
+				"name": "Last_Name",
+				"type": "String"
+			},
+			{
+				"name": "Unique_ID",
+				"type": "String"
+			},
+			{
+				"name": "Job_Title",
+				"type": "String"
+			},
+			{
+				"name": "Gradebook_Grade",
+				"type": "String"
+			},
+			{
+				"name": "Submission_",
+				"type": "String"
+			},
+			{
+				"name": "Submission_Score",
+				"type": "String"
+			},
+			{
+				"name": "Question_1",
+				"type": "String"
+			},
+			{
+				"name": "Question_2",
+				"type": "String"
+			},
+			{
+				"name": "Question_3",
+				"type": "String"
+			},
+			{
+				"name": "Question_4",
+				"type": "String"
+			},
+			{
+				"name": "Question_5",
+				"type": "String"
+			},
+			{
+				"name": "Question_6",
+				"type": "String"
+			},
+			{
+				"name": "Question_7",
+				"type": "String"
+			},
+			{
+				"name": "Question_8",
+				"type": "String"
+			},
+			{
+				"name": "Question_9",
+				"type": "String"
+			},
+			{
+				"name": "Question_10",
+				"type": "String"
+			},
+			{
+				"name": "Question_11",
+				"type": "String"
+			},
+			{
+				"name": "Question_12",
+				"type": "String"
+			},
+			{
+				"name": "Question_13",
+				"type": "String"
+			},
+			{
+				"name": "Question_14",
+				"type": "String"
+			},
+			{
+				"name": "Question_15",
+				"type": "String"
+			},
+			{
+				"name": "Question_16",
+				"type": "String"
+			},
+			{
+				"name": "Question_17",
+				"type": "String"
+			},
+			{
+				"name": "Question_18",
+				"type": "String"
+			},
+			{
+				"name": "Question_19",
+				"type": "String"
+			}
+		]
 	}
 }

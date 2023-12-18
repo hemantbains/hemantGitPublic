@@ -568,6 +568,15 @@
 										"typeProperties": {
 											"source": {
 												"type": "ExcelSource",
+												"additionalColumns": [
+													{
+														"name": "ds_Source_addcol_Sub_Smry",
+														"value": {
+															"value": "@variables('var_SubmissionSummary_filename')",
+															"type": "Expression"
+														}
+													}
+												],
 												"storeSettings": {
 													"type": "AzureBlobFSReadSettings",
 													"recursive": true,
@@ -583,6 +592,10 @@
 												"parameters": {
 													"dspara_SubSmry_filename": {
 														"value": "@variables('var_pick_bifurcation_filename_subSmry')",
+														"type": "Expression"
+													},
+													"dspara_SubSmry_filepath": {
+														"value": "@variables('var_pick_bifurcation_path_subSmry')",
 														"type": "Expression"
 													}
 												}
