@@ -2471,6 +2471,7 @@
 						},
 						"fileSystem": "edls-input"
 					},
+					"range": "A:R",
 					"firstRowAsHeader": true
 				},
 				"schema": []
