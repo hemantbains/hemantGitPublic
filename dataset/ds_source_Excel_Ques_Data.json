@@ -18,8 +18,13 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
+			"sheetName": "Sheet1",
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().dspara_Ques_Data_filename",
+					"type": "Expression"
+				},
 				"folderPath": {
 					"value": "@dataset().dspara_Ques_Data_filepath",
 					"type": "Expression"
