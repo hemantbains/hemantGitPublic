@@ -31,6 +31,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_adlsg2edls_excel'"
 		},
+		"ls_adlsg2edls_excel_StuSubmission_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_adlsg2edls_excel_StuSubmission'"
+		},
 		"ls_adlsg2edls_excel_SubSmry_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_adlsg2edls_excel_SubSmry'"
@@ -56,6 +60,10 @@
 			"defaultValue": "1212-065554-24xhgg4x"
 		},
 		"ls_adlsg2edls_excel_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsg2edls.dfs.core.windows.net/"
+		},
+		"ls_adlsg2edls_excel_StuSubmission_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://adlsg2edls.dfs.core.windows.net/"
 		},
@@ -108,6 +116,9 @@
 					"ls_adlsg2edls_excel_accountKey": {
 						"value": "[parameters('ls_adlsg2edls_excel_accountKey')]"
 					},
+					"ls_adlsg2edls_excel_StuSubmission_accountKey": {
+						"value": "[parameters('ls_adlsg2edls_excel_StuSubmission_accountKey')]"
+					},
 					"ls_adlsg2edls_excel_SubSmry_accountKey": {
 						"value": "[parameters('ls_adlsg2edls_excel_SubSmry_accountKey')]"
 					},
@@ -128,6 +139,9 @@
 					},
 					"ls_adlsg2edls_excel_properties_typeProperties_url": {
 						"value": "[parameters('ls_adlsg2edls_excel_properties_typeProperties_url')]"
+					},
+					"ls_adlsg2edls_excel_StuSubmission_properties_typeProperties_url": {
+						"value": "[parameters('ls_adlsg2edls_excel_StuSubmission_properties_typeProperties_url')]"
 					},
 					"ls_adlsg2edls_excel_SubSmry_properties_typeProperties_url": {
 						"value": "[parameters('ls_adlsg2edls_excel_SubSmry_properties_typeProperties_url')]"

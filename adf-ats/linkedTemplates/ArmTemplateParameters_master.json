@@ -23,6 +23,9 @@
 		"ls_adlsg2edls_excel_accountKey": {
 			"value": ""
 		},
+		"ls_adlsg2edls_excel_StuSubmission_accountKey": {
+			"value": ""
+		},
 		"ls_adlsg2edls_excel_SubSmry_accountKey": {
 			"value": ""
 		},
@@ -42,6 +45,9 @@
 			"value": "1212-065554-24xhgg4x"
 		},
 		"ls_adlsg2edls_excel_properties_typeProperties_url": {
+			"value": "https://adlsg2edls.dfs.core.windows.net/"
+		},
+		"ls_adlsg2edls_excel_StuSubmission_properties_typeProperties_url": {
 			"value": "https://adlsg2edls.dfs.core.windows.net/"
 		},
 		"ls_adlsg2edls_excel_SubSmry_properties_typeProperties_url": {

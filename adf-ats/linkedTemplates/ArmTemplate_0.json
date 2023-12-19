@@ -31,6 +31,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_adlsg2edls_excel'"
 		},
+		"ls_adlsg2edls_excel_StuSubmission_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_adlsg2edls_excel_StuSubmission'"
+		},
 		"ls_adlsg2edls_excel_SubSmry_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_adlsg2edls_excel_SubSmry'"
@@ -56,6 +60,10 @@
 			"defaultValue": "1212-065554-24xhgg4x"
 		},
 		"ls_adlsg2edls_excel_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsg2edls.dfs.core.windows.net/"
+		},
+		"ls_adlsg2edls_excel_StuSubmission_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://adlsg2edls.dfs.core.windows.net/"
 		},
@@ -164,6 +172,23 @@
 					"accountKey": {
 						"type": "SecureString",
 						"value": "[parameters('ls_adlsg2edls_excel_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_adlsg2edls_excel_StuSubmission')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_adlsg2edls_excel_StuSubmission_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ls_adlsg2edls_excel_StuSubmission_accountKey')]"
 					}
 				}
 			},
@@ -437,6 +462,47 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_source_Excel_Student_Submission')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adlsg2edls_excel_StuSubmission",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"dspara_stuSub_filepath": {
+						"type": "string"
+					},
+					"dspara_stuSub_filename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Sheet1",
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().dspara_stuSub_filename",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().dspara_stuSub_filepath",
+							"type": "Expression"
+						},
+						"fileSystem": "edls-input"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adlsg2edls_excel_StuSubmission')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_source_Excel_Student_info')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -683,6 +749,173 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_adlsg2edls_excel_SubSmry')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sink_AzureSqlDb_StuSubmission')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "sink_AzureSqlDb",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "User_UID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Username",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Last_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "First_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "User_Role_ID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "User_role_name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "User_School_ID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "User_School_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Course_NID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Course_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Course_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Section_NID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Section_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Section_Code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Section_Instructors",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Item_Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Item_ID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Item_Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "First_Access",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Latest_Attempt",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Total_Time",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Submission_Grade",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Submission",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Question_ID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Associated_Question_ID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Question_Type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Question",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Position_Number",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Sub_Question",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Answer_Submission",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Correct_Answer",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Points_Received",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Points_Possible",
+						"type": "nvarchar"
+					},
+					{
+						"name": "File_Source",
+						"type": "nvarchar"
+					},
+					{
+						"name": "time_stamp",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "TIMESTAMP",
+						"type": "timestamp"
+					}
+				],
+				"typeProperties": {
+					"schema": "AAOTA",
+					"table": "Student_Submissions_Staging"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/sink_AzureSqlDb')]"
 			]
 		},
 		{
@@ -2278,7 +2511,7 @@
 												},
 												"userProperties": [],
 												"typeProperties": {
-													"variableName": "var_SubmissionSubmission_filename",
+													"variableName": "var_StudentSubmission_filename",
 													"value": {
 														"value": "@variables('varForEachDbfsItem')",
 														"type": "Expression"
@@ -2286,10 +2519,97 @@
 												}
 											},
 											{
-												"name": "Copy data_ Student Submission",
+												"name": "Copy_data_Student_Submission",
 												"type": "Copy",
-												"state": "Inactive",
-												"onInactiveMarkAs": "Succeeded",
+												"dependsOn": [
+													{
+														"activity": "setvar_pick_bifur_path_stuSubmission",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													},
+													{
+														"activity": "setvar_pick_bifurcation_filename_stuSubmission",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "ExcelSource",
+														"additionalColumns": [
+															{
+																"name": "File_Source",
+																"value": {
+																	"value": "@variables('var_StudentSubmission_filename')",
+																	"type": "Expression"
+																}
+															},
+															{
+																"name": "time_stamp",
+																"value": {
+																	"value": "@utcnow()",
+																	"type": "Expression"
+																}
+															}
+														],
+														"storeSettings": {
+															"type": "AzureBlobFSReadSettings",
+															"recursive": true,
+															"enablePartitionDiscovery": false
+														}
+													},
+													"sink": {
+														"type": "AzureSqlSink",
+														"writeBehavior": "insert",
+														"sqlWriterUseTableLock": false
+													},
+													"enableStaging": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
+												},
+												"inputs": [
+													{
+														"referenceName": "ds_source_Excel_Student_Submission",
+														"type": "DatasetReference",
+														"parameters": {
+															"dspara_stuSub_filepath": {
+																"value": "@variables('var_pick_bifur_path_stuSubmission')",
+																"type": "Expression"
+															},
+															"dspara_stuSub_filename": {
+																"value": "@variables('var_pick_bifurcation_filename_stuSubmission')",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "sink_AzureSqlDb_StuSubmission",
+														"type": "DatasetReference",
+														"parameters": {}
+													}
+												]
+											},
+											{
+												"name": "Notebook_bifurcate_Student_Submissions_file_sourcename",
+												"type": "DatabricksNotebook",
 												"dependsOn": [
 													{
 														"activity": "ActSetVarStudentSubmission",
@@ -2307,7 +2627,89 @@
 												},
 												"userProperties": [],
 												"typeProperties": {
-													"enableStaging": false
+													"notebookPath": "/Users/hemant@insightanalytics.us/Ats_Edls/Notebook_bifurcate_Student_Submissions_file_sourcename",
+													"baseParameters": {
+														"para_dbfs_activity_Student_Submissions_filename": {
+															"value": "@variables('var_StudentSubmission_filename')",
+															"type": "Expression"
+														}
+													}
+												},
+												"linkedServiceName": {
+													"referenceName": "LS_Dbfs_bifurcate_SubSmry_filesource_name",
+													"type": "LinkedServiceReference"
+												}
+											},
+											{
+												"name": "setvar_chk_dbfs_bifur_StuSubmission",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "Notebook_bifurcate_Student_Submissions_file_sourcename",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_chk_dbfs_bifur_StuSubmission",
+													"value": {
+														"value": "@activity('Notebook_bifurcate_Student_Submissions_file_sourcename').output.runOutput",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "setvar_pick_bifur_path_stuSubmission",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "setvar_chk_dbfs_bifur_StuSubmission",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_pick_bifur_path_stuSubmission",
+													"value": {
+														"value": "@variables('var_chk_dbfs_bifur_StuSubmission')[0]",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "setvar_pick_bifurcation_filename_stuSubmission",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "setvar_chk_dbfs_bifur_StuSubmission",
+														"dependencyConditions": [
+															"Completed"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_pick_bifurcation_filename_stuSubmission",
+													"value": {
+														"value": "@variables('var_chk_dbfs_bifur_StuSubmission')[1]",
+														"type": "Expression"
+													}
 												}
 											}
 										]
@@ -2351,8 +2753,6 @@
 											{
 												"name": "Copy data - Question Data",
 												"type": "Copy",
-												"state": "Inactive",
-												"onInactiveMarkAs": "Succeeded",
 												"dependsOn": [
 													{
 														"activity": "ActSetVarQuestionsdata_file",
@@ -2370,8 +2770,52 @@
 												},
 												"userProperties": [],
 												"typeProperties": {
-													"enableStaging": false
-												}
+													"source": {
+														"type": "ExcelSource",
+														"storeSettings": {
+															"type": "AzureBlobFSReadSettings",
+															"recursive": true,
+															"enablePartitionDiscovery": false
+														}
+													},
+													"sink": {
+														"type": "AzureSqlSink",
+														"writeBehavior": "insert",
+														"sqlWriterUseTableLock": false
+													},
+													"enableStaging": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
+												},
+												"inputs": [
+													{
+														"referenceName": "ds_source_Excel_Student_Submission",
+														"type": "DatasetReference",
+														"parameters": {
+															"dspara_stuSub_filepath": {
+																"value": "@variables('var_pick_bifur_path_stuSubmission')",
+																"type": "Expression"
+															},
+															"dspara_stuSub_filename": {
+																"value": "@variables('var_pick_bifurcation_filename_stuSubmission')",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "sink_AzureSqlDb_StuSubmission",
+														"type": "DatasetReference",
+														"parameters": {}
+													}
+												]
 											}
 										]
 									}
@@ -2408,9 +2852,6 @@
 					"var_SubmissionSummary_filename": {
 						"type": "String"
 					},
-					"var_SubmissionSubmission_filename": {
-						"type": "String"
-					},
 					"var_Questionsdata_filename": {
 						"type": "String"
 					},
@@ -2443,6 +2884,18 @@
 					},
 					"var_pick_bifurcation_path_subSmry": {
 						"type": "String"
+					},
+					"var_StudentSubmission_filename": {
+						"type": "String"
+					},
+					"var_chk_dbfs_bifur_StuSubmission": {
+						"type": "Array"
+					},
+					"var_pick_bifur_path_stuSubmission": {
+						"type": "String"
+					},
+					"var_pick_bifurcation_filename_stuSubmission": {
+						"type": "String"
 					}
 				},
 				"folder": {
@@ -2458,7 +2911,9 @@
 				"[concat(variables('factoryId'), '/datasets/ds_source_Excel_SubSmry')]",
 				"[concat(variables('factoryId'), '/datasets/sink_ds_AzureSqlDb_SubSmry')]",
 				"[concat(variables('factoryId'), '/linkedServices/LS_Dbfs_bifurcate_SubSmry_filesource_name')]",
-				"[concat(variables('factoryId'), '/linkedServices/sink_AzureSqlDb')]"
+				"[concat(variables('factoryId'), '/linkedServices/sink_AzureSqlDb')]",
+				"[concat(variables('factoryId'), '/datasets/ds_source_Excel_Student_Submission')]",
+				"[concat(variables('factoryId'), '/datasets/sink_AzureSqlDb_StuSubmission')]"
 			]
 		}
 	]
