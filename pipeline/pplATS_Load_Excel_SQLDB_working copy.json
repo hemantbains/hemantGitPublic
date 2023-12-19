@@ -830,17 +830,62 @@
 										"typeProperties": {
 											"source": {
 												"type": "ExcelSource",
+												"additionalColumns": [
+													{
+														"name": "File_Source",
+														"value": {
+															"value": "@variables('var_StudentSubmission_filename')",
+															"type": "Expression"
+														}
+													},
+													{
+														"name": "time_stamp",
+														"value": {
+															"value": "@utcnow()",
+															"type": "Expression"
+														}
+													}
+												],
 												"storeSettings": {
 													"type": "AzureBlobFSReadSettings",
 													"recursive": true,
 													"enablePartitionDiscovery": false
 												}
 											},
-											"enableStaging": false
+											"sink": {
+												"type": "AzureSqlSink",
+												"writeBehavior": "insert",
+												"sqlWriterUseTableLock": false
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
 										},
 										"inputs": [
 											{
 												"referenceName": "ds_source_Excel_Student_Submission",
+												"type": "DatasetReference",
+												"parameters": {
+													"dspara_stuSubmission_filepath": {
+														"value": "@variables('var_pick_bifur_path_stuSubmission')",
+														"type": "Expression"
+													},
+													"dspara_stuSubmission_filename": {
+														"value": "@variables('var_pick_bifurcation_filename_stuSubmission')",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "sink_AzureSqlDb_StuSubmission",
 												"type": "DatasetReference"
 											}
 										]
