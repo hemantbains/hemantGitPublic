@@ -402,7 +402,7 @@
 										"typeProperties": {
 											"notebookPath": "/Users/hemant@insightanalytics.us/Ats_Edls/Notebook_bifurcate_file_sourcename",
 											"baseParameters": {
-												"para_dbfs_activity_stu_filename": {
+												"para_dbfs_activity_Student_Info_filename": {
 													"value": "@variables('varStudent_Information filename')",
 													"type": "Expression"
 												}
