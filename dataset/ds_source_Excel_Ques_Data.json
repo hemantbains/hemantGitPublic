@@ -30,7 +30,8 @@
 					"type": "Expression"
 				},
 				"fileSystem": "edls-input"
-			}
+			},
+			"firstRowAsHeader": true
 		},
 		"schema": []
 	}
