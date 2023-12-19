@@ -521,7 +521,7 @@
 						},
 						"fileSystem": "edls-input"
 					},
-					"range": "A:R",
+					"range": "A1:R1000",
 					"firstRowAsHeader": true
 				},
 				"schema": []
