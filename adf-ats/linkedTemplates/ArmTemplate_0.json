@@ -699,7 +699,7 @@
 				"schema": [],
 				"typeProperties": {
 					"schema": "AAOTA",
-					"table": "Submission_Summary_temp"
+					"table": "temp_Submission_Summary"
 				}
 			},
 			"dependsOn": [
@@ -1884,7 +1884,7 @@
 												"typeProperties": {
 													"notebookPath": "/Users/hemant@insightanalytics.us/Ats_Edls/Notebook_bifurcate_file_sourcename",
 													"baseParameters": {
-														"para_dbfs_activity_stu_filename": {
+														"para_dbfs_activity_Student_Info_filename": {
 															"value": "@variables('varStudent_Information filename')",
 															"type": "Expression"
 														}
@@ -2074,363 +2074,16 @@
 													},
 													"sink": {
 														"type": "AzureSqlSink",
-														"preCopyScript": "Truncate table AAOTA.Submission_Summary_temp",
+														"preCopyScript": "if exists(Select * from sys.objects where object_id = OBJECT_ID('[AAOTA].[temp_Submission_Summary]') and type='U')\ndrop table [AAOTA].[temp_Submission_Summary]",
 														"writeBehavior": "insert",
 														"sqlWriterUseTableLock": false,
 														"tableOption": "autoCreate",
 														"disableMetricsCollection": false
 													},
 													"enableStaging": false,
+													"validateDataConsistency": false,
 													"translator": {
 														"type": "TabularTranslator",
-														"mappings": [
-															{
-																"source": {
-																	"name": "Schoology_ID",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Schoology_ID",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "First_Name",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "First_Name",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Last_Name",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Last_Name",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Unique_ID",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Unique_ID",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Job_Title",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Job_Title",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Gradebook_Grade",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Gradebook_Grade",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Submission_",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Submission_",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Submission_Score",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Submission_Score",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Question_1",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Question_1",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Question_2",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Question_2",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Question_3",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Question_3",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Question_4",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Question_4",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Question_5",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Question_5",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Question_6",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Question_6",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Question_7",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Question_7",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Question_8",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Question_8",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Question_9",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Question_9",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Question_10",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Question_10",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Question_11",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Question_11",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Question_12",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Question_12",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Question_13",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Question_13",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Question_14",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Question_14",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Question_15",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Question_15",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Question_16",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Question_16",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Question_17",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Question_17",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Question_18",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Question_18",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "Question_19",
-																	"type": "String",
-																	"physicalType": "String"
-																},
-																"sink": {
-																	"name": "Question_19",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "File_Source",
-																	"type": "String"
-																},
-																"sink": {
-																	"name": "File_Source",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															},
-															{
-																"source": {
-																	"name": "time_stamp",
-																	"type": "String"
-																},
-																"sink": {
-																	"name": "time_stamp",
-																	"type": "String",
-																	"physicalType": "String"
-																}
-															}
-														],
 														"typeConversion": true,
 														"typeConversionSettings": {
 															"allowDataTruncation": true,
@@ -2568,8 +2221,8 @@
 												}
 											},
 											{
-												"name": "Copy data Sub_Smry Temp to Sub Smry Stage",
-												"type": "Copy",
+												"name": "SP_Insert Sub_Smry_temp into  Sub_Smry_Staging",
+												"type": "SqlServerStoredProcedure",
 												"dependsOn": [
 													{
 														"activity": "Copy data_ SubmisionSummary",
@@ -2587,43 +2240,12 @@
 												},
 												"userProperties": [],
 												"typeProperties": {
-													"source": {
-														"type": "AzureSqlSource",
-														"sqlReaderQuery": "Select * from AAOTA.Submission_Summary_temp",
-														"queryTimeout": "02:00:00",
-														"partitionOption": "None"
-													},
-													"sink": {
-														"type": "AzureSqlSink",
-														"sqlWriterStoredProcedureName": "[[AAOTA].[Submission_Summary_temp_to_Staging_insert]",
-														"sqlWriterTableType": "spvar1",
-														"storedProcedureTableTypeParameterName": "int",
-														"disableMetricsCollection": false
-													},
-													"enableStaging": false,
-													"translator": {
-														"type": "TabularTranslator",
-														"typeConversion": true,
-														"typeConversionSettings": {
-															"allowDataTruncation": true,
-															"treatBooleanAsNumber": false
-														}
-													}
+													"storedProcedureName": "[[AAOTA].[Submission_Summary_temp_to_Staging_insert]"
 												},
-												"inputs": [
-													{
-														"referenceName": "ds_Src_AzureSqlTable",
-														"type": "DatasetReference",
-														"parameters": {}
-													}
-												],
-												"outputs": [
-													{
-														"referenceName": "sink_ds_AzureSqlDb_SubSmry",
-														"type": "DatasetReference",
-														"parameters": {}
-													}
-												]
+												"linkedServiceName": {
+													"referenceName": "sink_AzureSqlDb",
+													"type": "LinkedServiceReference"
+												}
 											}
 										]
 									}
@@ -2836,7 +2458,7 @@
 				"[concat(variables('factoryId'), '/datasets/ds_source_Excel_SubSmry')]",
 				"[concat(variables('factoryId'), '/datasets/sink_ds_AzureSqlDb_SubSmry')]",
 				"[concat(variables('factoryId'), '/linkedServices/LS_Dbfs_bifurcate_SubSmry_filesource_name')]",
-				"[concat(variables('factoryId'), '/datasets/ds_Src_AzureSqlTable')]"
+				"[concat(variables('factoryId'), '/linkedServices/sink_AzureSqlDb')]"
 			]
 		}
 	]
