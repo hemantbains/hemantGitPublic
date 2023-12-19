@@ -10,7 +10,7 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": "AAOTA",
-			"table": "Submission_Summary_temp"
+			"table": "temp_Submission_Summary"
 		}
 	}
 }

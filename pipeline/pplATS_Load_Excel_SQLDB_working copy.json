@@ -592,13 +592,13 @@
 											},
 											"sink": {
 												"type": "AzureSqlSink",
-												"preCopyScript": "Truncate table AAOTA.Submission_Summary_temp",
 												"writeBehavior": "insert",
 												"sqlWriterUseTableLock": false,
 												"tableOption": "autoCreate",
 												"disableMetricsCollection": false
 											},
 											"enableStaging": false,
+											"validateDataConsistency": false,
 											"translator": {
 												"type": "TabularTranslator",
 												"mappings": [
@@ -1106,7 +1106,7 @@
 										"typeProperties": {
 											"source": {
 												"type": "AzureSqlSource",
-												"sqlReaderQuery": "Select * from AAOTA.Submission_Summary_temp",
+												"sqlReaderQuery": "Select * from AAOTA.temp_Submission_Summary",
 												"queryTimeout": "02:00:00",
 												"partitionOption": "None"
 											},
