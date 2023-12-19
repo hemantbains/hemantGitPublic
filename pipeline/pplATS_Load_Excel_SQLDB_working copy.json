@@ -1101,7 +1101,13 @@
 										"inputs": [
 											{
 												"referenceName": "ds_source_Excel_Ques_Data",
-												"type": "DatasetReference"
+												"type": "DatasetReference",
+												"parameters": {
+													"dspara_Ques_Data_filepath": {
+														"value": "@variables('var_pick_bifur_path_Ques_Data')",
+														"type": "Expression"
+													}
+												}
 											}
 										],
 										"outputs": [
@@ -1185,7 +1191,7 @@
 										},
 										"userProperties": [],
 										"typeProperties": {
-											"variableName": "setvar_pick_bifur_path_Ques_Data",
+											"variableName": "var_pick_bifur_path_Ques_Data",
 											"value": {
 												"value": "@variables('var_chk_dbfs_bifur_Ques_Data')[0]",
 												"type": "Expression"
@@ -1296,10 +1302,10 @@
 			"var_chk_dbfs_bifur_Ques_Data": {
 				"type": "Array"
 			},
-			"setvar_pick_bifur_path_Ques_Data": {
+			"var_pick_bifurcation_filename_Ques_Data": {
 				"type": "String"
 			},
-			"var_pick_bifurcation_filename_Ques_Data": {
+			"var_pick_bifur_path_Ques_Data": {
 				"type": "String"
 			}
 		},

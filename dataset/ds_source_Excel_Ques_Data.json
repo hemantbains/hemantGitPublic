@@ -5,11 +5,26 @@
 			"referenceName": "LS_adlsg2edls_excel_Ques_Data",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"dspara_Ques_Data_filepath": {
+				"type": "string",
+				"defaultValue": "abc"
+			},
+			"dspara_Ques_Data_filename": {
+				"type": "string",
+				"defaultValue": "abc"
+			}
+		},
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobFSLocation"
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@dataset().dspara_Ques_Data_filepath",
+					"type": "Expression"
+				},
+				"fileSystem": "edls-input"
 			}
 		},
 		"schema": []
