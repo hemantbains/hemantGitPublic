@@ -10,8 +10,7 @@
 				"type": "string"
 			},
 			"dspara_SubSmry_filepath": {
-				"type": "string",
-				"defaultValue": "abc"
+				"type": "string"
 			}
 		},
 		"annotations": [],
@@ -20,10 +19,17 @@
 			"sheetName": "Sheet1",
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Submission-Summary-Unit-5-Lesson-22-2022-04-10-213323.xlsx",
-				"folderPath": "Schoology/AAOTA/2021-22/1 - Lesson  Assessments/1 - ELA/0 - Grade K/Sec 2",
+				"fileName": {
+					"value": "@dataset().dspara_SubSmry_filename",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().dspara_SubSmry_filepath",
+					"type": "Expression"
+				},
 				"fileSystem": "edls-input"
 			},
+			"range": "",
 			"firstRowAsHeader": true
 		},
 		"schema": [
