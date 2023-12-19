@@ -15,13 +15,25 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'LS_AzureDatabricks1'"
 		},
+		"LS_Dbfs_bifurcate_SubSmry_filesource_name_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'LS_Dbfs_bifurcate_SubSmry_filesource_name'"
+		},
 		"LS_dbfs2_bifurcate_stu_sourcefilepath_accessToken": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'LS_dbfs2_bifurcate_stu_sourcefilepath'"
 		},
+		"ls_Src_AzureSQLDB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_Src_AzureSQLDB'"
+		},
 		"ls_adlsg2edls_excel_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_adlsg2edls_excel'"
+		},
+		"ls_adlsg2edls_excel_SubSmry_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_adlsg2edls_excel_SubSmry'"
 		},
 		"sink_AzureSqlDb_connectionString": {
 			"type": "secureString",
@@ -35,11 +47,19 @@
 			"type": "string",
 			"defaultValue": "1212-065554-24xhgg4x"
 		},
+		"LS_Dbfs_bifurcate_SubSmry_filesource_name_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "1212-065554-24xhgg4x"
+		},
 		"LS_dbfs2_bifurcate_stu_sourcefilepath_properties_typeProperties_existingClusterId": {
 			"type": "string",
 			"defaultValue": "1212-065554-24xhgg4x"
 		},
 		"ls_adlsg2edls_excel_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsg2edls.dfs.core.windows.net/"
+		},
+		"ls_adlsg2edls_excel_SubSmry_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://adlsg2edls.dfs.core.windows.net/"
 		},
@@ -76,11 +96,20 @@
 					"LS_AzureDatabricks1_accessToken": {
 						"value": "[parameters('LS_AzureDatabricks1_accessToken')]"
 					},
+					"LS_Dbfs_bifurcate_SubSmry_filesource_name_accessToken": {
+						"value": "[parameters('LS_Dbfs_bifurcate_SubSmry_filesource_name_accessToken')]"
+					},
 					"LS_dbfs2_bifurcate_stu_sourcefilepath_accessToken": {
 						"value": "[parameters('LS_dbfs2_bifurcate_stu_sourcefilepath_accessToken')]"
 					},
+					"ls_Src_AzureSQLDB_connectionString": {
+						"value": "[parameters('ls_Src_AzureSQLDB_connectionString')]"
+					},
 					"ls_adlsg2edls_excel_accountKey": {
 						"value": "[parameters('ls_adlsg2edls_excel_accountKey')]"
+					},
+					"ls_adlsg2edls_excel_SubSmry_accountKey": {
+						"value": "[parameters('ls_adlsg2edls_excel_SubSmry_accountKey')]"
 					},
 					"sink_AzureSqlDb_connectionString": {
 						"value": "[parameters('sink_AzureSqlDb_connectionString')]"
@@ -91,11 +120,17 @@
 					"LS_AzureDatabricks1_properties_typeProperties_existingClusterId": {
 						"value": "[parameters('LS_AzureDatabricks1_properties_typeProperties_existingClusterId')]"
 					},
+					"LS_Dbfs_bifurcate_SubSmry_filesource_name_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('LS_Dbfs_bifurcate_SubSmry_filesource_name_properties_typeProperties_existingClusterId')]"
+					},
 					"LS_dbfs2_bifurcate_stu_sourcefilepath_properties_typeProperties_existingClusterId": {
 						"value": "[parameters('LS_dbfs2_bifurcate_stu_sourcefilepath_properties_typeProperties_existingClusterId')]"
 					},
 					"ls_adlsg2edls_excel_properties_typeProperties_url": {
 						"value": "[parameters('ls_adlsg2edls_excel_properties_typeProperties_url')]"
+					},
+					"ls_adlsg2edls_excel_SubSmry_properties_typeProperties_url": {
+						"value": "[parameters('ls_adlsg2edls_excel_SubSmry_properties_typeProperties_url')]"
 					}
 				}
 			},

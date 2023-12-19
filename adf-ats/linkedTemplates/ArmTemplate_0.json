@@ -15,13 +15,25 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'LS_AzureDatabricks1'"
 		},
+		"LS_Dbfs_bifurcate_SubSmry_filesource_name_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'LS_Dbfs_bifurcate_SubSmry_filesource_name'"
+		},
 		"LS_dbfs2_bifurcate_stu_sourcefilepath_accessToken": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'LS_dbfs2_bifurcate_stu_sourcefilepath'"
 		},
+		"ls_Src_AzureSQLDB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_Src_AzureSQLDB'"
+		},
 		"ls_adlsg2edls_excel_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_adlsg2edls_excel'"
+		},
+		"ls_adlsg2edls_excel_SubSmry_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_adlsg2edls_excel_SubSmry'"
 		},
 		"sink_AzureSqlDb_connectionString": {
 			"type": "secureString",
@@ -35,11 +47,19 @@
 			"type": "string",
 			"defaultValue": "1212-065554-24xhgg4x"
 		},
+		"LS_Dbfs_bifurcate_SubSmry_filesource_name_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "1212-065554-24xhgg4x"
+		},
 		"LS_dbfs2_bifurcate_stu_sourcefilepath_properties_typeProperties_existingClusterId": {
 			"type": "string",
 			"defaultValue": "1212-065554-24xhgg4x"
 		},
 		"ls_adlsg2edls_excel_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsg2edls.dfs.core.windows.net/"
+		},
+		"ls_adlsg2edls_excel_SubSmry_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://adlsg2edls.dfs.core.windows.net/"
 		}
@@ -84,6 +104,24 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/LS_Dbfs_bifurcate_SubSmry_filesource_name')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://adb-8088961883452051.11.azuredatabricks.net",
+					"accessToken": {
+						"type": "SecureString",
+						"value": "[parameters('LS_Dbfs_bifurcate_SubSmry_filesource_name_accessToken')]"
+					},
+					"existingClusterId": "[parameters('LS_Dbfs_bifurcate_SubSmry_filesource_name_properties_typeProperties_existingClusterId')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/LS_dbfs2_bifurcate_stu_sourcefilepath')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -102,6 +140,19 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ls_Src_AzureSQLDB')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_Src_AzureSQLDB_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ls_adlsg2edls_excel')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -113,6 +164,23 @@
 					"accountKey": {
 						"type": "SecureString",
 						"value": "[parameters('ls_adlsg2edls_excel_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_adlsg2edls_excel_SubSmry')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_adlsg2edls_excel_SubSmry_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ls_adlsg2edls_excel_SubSmry_accountKey')]"
 					}
 				}
 			},
@@ -348,7 +416,28 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_source_Excel')]",
+			"name": "[concat(parameters('factoryName'), '/ds_Src_AzureSqlTable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_Src_AzureSQLDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "AAOTA",
+					"table": "Submission_Summary_temp"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_Src_AzureSQLDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_source_Excel_Student_info')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -443,6 +532,178 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_adlsg2edls_excel')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_source_Excel_SubSmry')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adlsg2edls_excel_SubSmry",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"dspara_SubSmry_filename": {
+						"type": "string"
+					},
+					"dspara_SubSmry_filepath": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Sheet1",
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().dspara_SubSmry_filename",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().dspara_SubSmry_filepath",
+							"type": "Expression"
+						},
+						"fileSystem": "edls-input"
+					},
+					"range": "",
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "Schoology_ID",
+						"type": "String"
+					},
+					{
+						"name": "First_Name",
+						"type": "String"
+					},
+					{
+						"name": "Last_Name",
+						"type": "String"
+					},
+					{
+						"name": "Unique_ID",
+						"type": "String"
+					},
+					{
+						"name": "Job_Title",
+						"type": "String"
+					},
+					{
+						"name": "Gradebook_Grade",
+						"type": "String"
+					},
+					{
+						"name": "Submission_",
+						"type": "String"
+					},
+					{
+						"name": "Submission_Score",
+						"type": "String"
+					},
+					{
+						"name": "Question_1",
+						"type": "String"
+					},
+					{
+						"name": "Question_2",
+						"type": "String"
+					},
+					{
+						"name": "Question_3",
+						"type": "String"
+					},
+					{
+						"name": "Question_4",
+						"type": "String"
+					},
+					{
+						"name": "Question_5",
+						"type": "String"
+					},
+					{
+						"name": "Question_6",
+						"type": "String"
+					},
+					{
+						"name": "Question_7",
+						"type": "String"
+					},
+					{
+						"name": "Question_8",
+						"type": "String"
+					},
+					{
+						"name": "Question_9",
+						"type": "String"
+					},
+					{
+						"name": "Question_10",
+						"type": "String"
+					},
+					{
+						"name": "Question_11",
+						"type": "String"
+					},
+					{
+						"name": "Question_12",
+						"type": "String"
+					},
+					{
+						"name": "Question_13",
+						"type": "String"
+					},
+					{
+						"name": "Question_14",
+						"type": "String"
+					},
+					{
+						"name": "Question_15",
+						"type": "String"
+					},
+					{
+						"name": "Question_16",
+						"type": "String"
+					},
+					{
+						"name": "Question_17",
+						"type": "String"
+					},
+					{
+						"name": "Question_18",
+						"type": "String"
+					},
+					{
+						"name": "Question_19",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_adlsg2edls_excel_SubSmry')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sink_ds_AzureSqlDb_SubSmry')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "sink_AzureSqlDb",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "AAOTA",
+					"table": "Submission_Summary_temp"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/sink_AzureSqlDb')]"
 			]
 		},
 		{
@@ -808,7 +1069,7 @@
 												},
 												"inputs": [
 													{
-														"referenceName": "ds_source_Excel",
+														"referenceName": "ds_source_Excel_Student_info",
 														"type": "DatasetReference",
 														"parameters": {
 															"dspara_stuinfo_filepath": {
@@ -1211,7 +1472,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_AzureDatabricks1')]",
-				"[concat(variables('factoryId'), '/datasets/ds_source_Excel')]",
+				"[concat(variables('factoryId'), '/datasets/ds_source_Excel_Student_info')]",
 				"[concat(variables('factoryId'), '/datasets/AzureSqldb_Student_Info')]",
 				"[concat(variables('factoryId'), '/linkedServices/LS_dbfs2_bifurcate_stu_sourcefilepath')]"
 			]
@@ -1579,7 +1840,7 @@
 												},
 												"inputs": [
 													{
-														"referenceName": "ds_source_Excel",
+														"referenceName": "ds_source_Excel_Student_info",
 														"type": "DatasetReference",
 														"parameters": {
 															"dspara_stuinfo_filepath": {
@@ -1762,10 +2023,448 @@
 												}
 											},
 											{
-												"name": "Copy data_ Student Summary",
+												"name": "Copy data_ SubmisionSummary",
 												"type": "Copy",
-												"state": "Inactive",
-												"onInactiveMarkAs": "Succeeded",
+												"dependsOn": [
+													{
+														"activity": "setvar_pick_bifurcation_sub_smry_path",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													},
+													{
+														"activity": "setvar_pick_bifurcation_filename_subSmry",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "ExcelSource",
+														"additionalColumns": [
+															{
+																"name": "File_Source",
+																"value": {
+																	"value": "@variables('var_SubmissionSummary_filename')",
+																	"type": "Expression"
+																}
+															},
+															{
+																"name": "time_stamp",
+																"value": {
+																	"value": "@utcnow()",
+																	"type": "Expression"
+																}
+															}
+														],
+														"storeSettings": {
+															"type": "AzureBlobFSReadSettings",
+															"recursive": false,
+															"enablePartitionDiscovery": false
+														}
+													},
+													"sink": {
+														"type": "AzureSqlSink",
+														"preCopyScript": "Truncate table AAOTA.Submission_Summary_temp",
+														"writeBehavior": "insert",
+														"sqlWriterUseTableLock": false,
+														"tableOption": "autoCreate",
+														"disableMetricsCollection": false
+													},
+													"enableStaging": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"mappings": [
+															{
+																"source": {
+																	"name": "Schoology_ID",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Schoology_ID",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "First_Name",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "First_Name",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Last_Name",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Last_Name",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Unique_ID",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Unique_ID",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Job_Title",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Job_Title",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Gradebook_Grade",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Gradebook_Grade",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Submission_",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Submission_",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Submission_Score",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Submission_Score",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Question_1",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Question_1",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Question_2",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Question_2",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Question_3",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Question_3",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Question_4",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Question_4",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Question_5",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Question_5",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Question_6",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Question_6",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Question_7",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Question_7",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Question_8",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Question_8",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Question_9",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Question_9",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Question_10",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Question_10",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Question_11",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Question_11",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Question_12",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Question_12",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Question_13",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Question_13",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Question_14",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Question_14",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Question_15",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Question_15",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Question_16",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Question_16",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Question_17",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Question_17",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Question_18",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Question_18",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "Question_19",
+																	"type": "String",
+																	"physicalType": "String"
+																},
+																"sink": {
+																	"name": "Question_19",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "File_Source",
+																	"type": "String"
+																},
+																"sink": {
+																	"name": "File_Source",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															},
+															{
+																"source": {
+																	"name": "time_stamp",
+																	"type": "String"
+																},
+																"sink": {
+																	"name": "time_stamp",
+																	"type": "String",
+																	"physicalType": "String"
+																}
+															}
+														],
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
+												},
+												"inputs": [
+													{
+														"referenceName": "ds_source_Excel_SubSmry",
+														"type": "DatasetReference",
+														"parameters": {
+															"dspara_SubSmry_filename": {
+																"value": "@variables('var_pick_bifurcation_filename_subSmry')",
+																"type": "Expression"
+															},
+															"dspara_SubSmry_filepath": {
+																"value": "@variables('var_pick_bifurcation_path_subSmry')",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "sink_ds_AzureSqlDb_SubSmry",
+														"type": "DatasetReference",
+														"parameters": {}
+													}
+												]
+											},
+											{
+												"name": "Notebook - bifurcate SubSmry Data filepath",
+												"type": "DatabricksNotebook",
 												"dependsOn": [
 													{
 														"activity": "ActSetVarSubmissionSummary_filename",
@@ -1783,8 +2482,148 @@
 												},
 												"userProperties": [],
 												"typeProperties": {
-													"enableStaging": false
+													"notebookPath": "/Users/hemant@insightanalytics.us/Ats_Edls/Notebook_bifurcate_Sub_Summary_file_sourcename",
+													"baseParameters": {
+														"para_dbfs_activity_sub_smry_filename": {
+															"value": "@variables('var_SubmissionSummary_filename')",
+															"type": "Expression"
+														}
+													}
+												},
+												"linkedServiceName": {
+													"referenceName": "LS_Dbfs_bifurcate_SubSmry_filesource_name",
+													"type": "LinkedServiceReference"
 												}
+											},
+											{
+												"name": "setvar_chk_birfurcation_dbfs_output_SubSmry",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "Notebook - bifurcate SubSmry Data filepath",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_chk_bifurcation_subSmry",
+													"value": {
+														"value": "@activity('Notebook - bifurcate SubSmry Data filepath').output.runOutput",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "setvar_pick_bifurcation_sub_smry_path",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "setvar_chk_birfurcation_dbfs_output_SubSmry",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_pick_bifurcation_path_subSmry",
+													"value": {
+														"value": "@variables('var_chk_bifurcation_subSmry')[0]",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "setvar_pick_bifurcation_filename_subSmry",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "setvar_chk_birfurcation_dbfs_output_SubSmry",
+														"dependencyConditions": [
+															"Completed"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_pick_bifurcation_filename_subSmry",
+													"value": {
+														"value": "@variables('var_chk_bifurcation_subSmry')[1]",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "Copy data Sub_Smry Temp to Sub Smry Stage",
+												"type": "Copy",
+												"dependsOn": [
+													{
+														"activity": "Copy data_ SubmisionSummary",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "AzureSqlSource",
+														"sqlReaderQuery": "Select * from AAOTA.Submission_Summary_temp",
+														"queryTimeout": "02:00:00",
+														"partitionOption": "None"
+													},
+													"sink": {
+														"type": "AzureSqlSink",
+														"sqlWriterStoredProcedureName": "[[AAOTA].[Submission_Summary_temp_to_Staging_insert]",
+														"sqlWriterTableType": "spvar1",
+														"storedProcedureTableTypeParameterName": "int",
+														"disableMetricsCollection": false
+													},
+													"enableStaging": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
+												},
+												"inputs": [
+													{
+														"referenceName": "ds_Src_AzureSqlTable",
+														"type": "DatasetReference",
+														"parameters": {}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "sink_ds_AzureSqlDb_SubSmry",
+														"type": "DatasetReference",
+														"parameters": {}
+													}
+												]
 											}
 										]
 									}
@@ -1973,6 +2812,15 @@
 					},
 					"var_pick_bifurcation_filename": {
 						"type": "String"
+					},
+					"var_chk_bifurcation_subSmry": {
+						"type": "Array"
+					},
+					"var_pick_bifurcation_filename_subSmry": {
+						"type": "String"
+					},
+					"var_pick_bifurcation_path_subSmry": {
+						"type": "String"
 					}
 				},
 				"folder": {
@@ -1982,9 +2830,13 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_AzureDatabricks1')]",
-				"[concat(variables('factoryId'), '/datasets/ds_source_Excel')]",
+				"[concat(variables('factoryId'), '/datasets/ds_source_Excel_Student_info')]",
 				"[concat(variables('factoryId'), '/datasets/AzureSqldb_Student_Info')]",
-				"[concat(variables('factoryId'), '/linkedServices/LS_dbfs2_bifurcate_stu_sourcefilepath')]"
+				"[concat(variables('factoryId'), '/linkedServices/LS_dbfs2_bifurcate_stu_sourcefilepath')]",
+				"[concat(variables('factoryId'), '/datasets/ds_source_Excel_SubSmry')]",
+				"[concat(variables('factoryId'), '/datasets/sink_ds_AzureSqlDb_SubSmry')]",
+				"[concat(variables('factoryId'), '/linkedServices/LS_Dbfs_bifurcate_SubSmry_filesource_name')]",
+				"[concat(variables('factoryId'), '/datasets/ds_Src_AzureSqlTable')]"
 			]
 		}
 	]
