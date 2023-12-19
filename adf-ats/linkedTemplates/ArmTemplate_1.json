@@ -1632,7 +1632,7 @@
 														],
 														"storeSettings": {
 															"type": "AzureBlobFSReadSettings",
-															"recursive": true,
+															"recursive": false,
 															"enablePartitionDiscovery": false
 														}
 													},
