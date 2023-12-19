@@ -1106,6 +1106,10 @@
 													"dspara_Ques_Data_filepath": {
 														"value": "@variables('var_pick_bifur_path_Ques_Data')",
 														"type": "Expression"
+													},
+													"dspara_Ques_Data_filename": {
+														"value": "@variables('var_pick_bifurcation_filename_Ques_Data')",
+														"type": "Expression"
 													}
 												}
 											}
