@@ -1034,7 +1034,7 @@
 										}
 									},
 									{
-										"name": "Copy data - Question Data",
+										"name": "Copy_data_Ques_Data",
 										"type": "Copy",
 										"dependsOn": [
 											{
@@ -1061,9 +1061,25 @@
 										"typeProperties": {
 											"source": {
 												"type": "ExcelSource",
+												"additionalColumns": [
+													{
+														"name": "File_Source",
+														"value": {
+															"value": "@variables('var_Questionsdata_filename')",
+															"type": "Expression"
+														}
+													},
+													{
+														"name": "time_stamp",
+														"value": {
+															"value": "@utcnow()",
+															"type": "Expression"
+														}
+													}
+												],
 												"storeSettings": {
 													"type": "AzureBlobFSReadSettings",
-													"recursive": true,
+													"recursive": false,
 													"enablePartitionDiscovery": false
 												}
 											},
@@ -1084,18 +1100,8 @@
 										},
 										"inputs": [
 											{
-												"referenceName": "ds_source_Excel_Student_Submission",
-												"type": "DatasetReference",
-												"parameters": {
-													"dspara_stuSub_filepath": {
-														"value": "@variables('var_pick_bifur_path_stuSubmission')",
-														"type": "Expression"
-													},
-													"dspara_stuSub_filename": {
-														"value": "@variables('var_pick_bifurcation_filename_stuSubmission')",
-														"type": "Expression"
-													}
-												}
+												"referenceName": "ds_source_Excel_Ques_Data",
+												"type": "DatasetReference"
 											}
 										],
 										"outputs": [

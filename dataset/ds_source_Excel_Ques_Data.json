@@ -1,0 +1,17 @@
+{
+	"name": "ds_source_Excel_Ques_Data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_adlsg2edls_excel_Ques_Data",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation"
+			}
+		},
+		"schema": []
+	}
+}
