@@ -1,0 +1,26 @@
+{
+	"name": "ds_source_Excel_Student_Submission",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adlsg2edls_excel_StuSubmission",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"dspara_stuSubmission_filepath": {
+				"type": "string"
+			},
+			"dspara_stuSubmission_filename": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "edls-input"
+			}
+		},
+		"schema": []
+	}
+}

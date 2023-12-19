@@ -795,7 +795,7 @@
 										},
 										"userProperties": [],
 										"typeProperties": {
-											"variableName": "var_SubmissionSubmission_filename",
+											"variableName": "var_StudentSubmission_filename",
 											"value": {
 												"value": "@variables('varForEachDbfsItem')",
 												"type": "Expression"
@@ -803,10 +803,51 @@
 										}
 									},
 									{
-										"name": "Copy data_ Student Submission",
+										"name": "Copy_data_Student_Submission",
 										"type": "Copy",
-										"state": "Inactive",
-										"onInactiveMarkAs": "Succeeded",
+										"dependsOn": [
+											{
+												"activity": "setvar_pick_bifur_path_stuSubmission",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											},
+											{
+												"activity": "setvar_pick_bifurcation_filename_stuSubmission",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.12:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "ExcelSource",
+												"storeSettings": {
+													"type": "AzureBlobFSReadSettings",
+													"recursive": true,
+													"enablePartitionDiscovery": false
+												}
+											},
+											"enableStaging": false
+										},
+										"inputs": [
+											{
+												"referenceName": "ds_source_Excel_Student_Submission",
+												"type": "DatasetReference"
+											}
+										]
+									},
+									{
+										"name": "Notebook_bifurcate_Student_Submissions_file_sourcename",
+										"type": "DatabricksNotebook",
 										"dependsOn": [
 											{
 												"activity": "ActSetVarStudentSubmission",
@@ -824,7 +865,89 @@
 										},
 										"userProperties": [],
 										"typeProperties": {
-											"enableStaging": false
+											"notebookPath": "/Users/hemant@insightanalytics.us/Ats_Edls/Notebook_bifurcate_Student_Submissions_file_sourcename",
+											"baseParameters": {
+												"para_dbfs_activity_Student_Submissions_filename": {
+													"value": "@variables('var_StudentSubmission_filename')",
+													"type": "Expression"
+												}
+											}
+										},
+										"linkedServiceName": {
+											"referenceName": "LS_Dbfs_bifurcate_SubSmry_filesource_name",
+											"type": "LinkedServiceReference"
+										}
+									},
+									{
+										"name": "setvar_chk_dbfs_bifur_StuSubmission",
+										"type": "SetVariable",
+										"dependsOn": [
+											{
+												"activity": "Notebook_bifurcate_Student_Submissions_file_sourcename",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "var_chk_dbfs_bifur_StuSubmission",
+											"value": {
+												"value": "@activity('Notebook_bifurcate_Student_Submissions_file_sourcename').output.runOutput",
+												"type": "Expression"
+											}
+										}
+									},
+									{
+										"name": "setvar_pick_bifur_path_stuSubmission",
+										"type": "SetVariable",
+										"dependsOn": [
+											{
+												"activity": "setvar_chk_dbfs_bifur_StuSubmission",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "var_pick_bifur_path_stuSubmission",
+											"value": {
+												"value": "@variables('var_chk_dbfs_bifur_StuSubmission')[0]",
+												"type": "Expression"
+											}
+										}
+									},
+									{
+										"name": "setvar_pick_bifurcation_filename_stuSubmission",
+										"type": "SetVariable",
+										"dependsOn": [
+											{
+												"activity": "setvar_chk_dbfs_bifur_StuSubmission",
+												"dependencyConditions": [
+													"Completed"
+												]
+											}
+										],
+										"policy": {
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "var_pick_bifurcation_filename_stuSubmission",
+											"value": {
+												"value": "@variables('var_chk_dbfs_bifur_StuSubmission')[1]",
+												"type": "Expression"
+											}
 										}
 									}
 								]
@@ -868,8 +991,6 @@
 									{
 										"name": "Copy data - Question Data",
 										"type": "Copy",
-										"state": "Inactive",
-										"onInactiveMarkAs": "Succeeded",
 										"dependsOn": [
 											{
 												"activity": "ActSetVarQuestionsdata_file",
@@ -922,9 +1043,6 @@
 			"var_SubmissionSummary_filename": {
 				"type": "String"
 			},
-			"var_SubmissionSubmission_filename": {
-				"type": "String"
-			},
 			"var_Questionsdata_filename": {
 				"type": "String"
 			},
@@ -956,6 +1074,18 @@
 				"type": "String"
 			},
 			"var_pick_bifurcation_path_subSmry": {
+				"type": "String"
+			},
+			"var_StudentSubmission_filename": {
+				"type": "String"
+			},
+			"var_chk_dbfs_bifur_StuSubmission": {
+				"type": "Array"
+			},
+			"var_pick_bifur_path_stuSubmission": {
+				"type": "String"
+			},
+			"var_pick_bifurcation_filename_stuSubmission": {
 				"type": "String"
 			}
 		},
