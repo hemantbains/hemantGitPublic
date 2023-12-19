@@ -872,11 +872,11 @@
 												"referenceName": "ds_source_Excel_Student_Submission",
 												"type": "DatasetReference",
 												"parameters": {
-													"dspara_stuSubmission_filepath": {
+													"dspara_stuSub_filepath": {
 														"value": "@variables('var_pick_bifur_path_stuSubmission')",
 														"type": "Expression"
 													},
-													"dspara_stuSubmission_filename": {
+													"dspara_stuSub_filename": {
 														"value": "@variables('var_pick_bifurcation_filename_stuSubmission')",
 														"type": "Expression"
 													}
@@ -1053,8 +1053,51 @@
 										},
 										"userProperties": [],
 										"typeProperties": {
-											"enableStaging": false
-										}
+											"source": {
+												"type": "ExcelSource",
+												"storeSettings": {
+													"type": "AzureBlobFSReadSettings",
+													"recursive": true,
+													"enablePartitionDiscovery": false
+												}
+											},
+											"sink": {
+												"type": "AzureSqlSink",
+												"writeBehavior": "insert",
+												"sqlWriterUseTableLock": false
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "ds_source_Excel_Student_Submission",
+												"type": "DatasetReference",
+												"parameters": {
+													"dspara_stuSub_filepath": {
+														"value": "@variables('var_pick_bifur_path_stuSubmission')",
+														"type": "Expression"
+													},
+													"dspara_stuSub_filename": {
+														"value": "@variables('var_pick_bifurcation_filename_stuSubmission')",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "sink_AzureSqlDb_StuSubmission",
+												"type": "DatasetReference"
+											}
+										]
 									}
 								]
 							}

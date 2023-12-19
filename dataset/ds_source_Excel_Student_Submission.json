@@ -6,20 +6,30 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"dspara_stuSubmission_filepath": {
+			"dspara_stuSub_filepath": {
 				"type": "string"
 			},
-			"dspara_stuSubmission_filename": {
+			"dspara_stuSub_filename": {
 				"type": "string"
 			}
 		},
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
+			"sheetName": "Sheet1",
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().dspara_stuSub_filename",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().dspara_stuSub_filepath",
+					"type": "Expression"
+				},
 				"fileSystem": "edls-input"
-			}
+			},
+			"firstRowAsHeader": true
 		},
 		"schema": []
 	}
