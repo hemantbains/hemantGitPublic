@@ -19,6 +19,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'LS_Dbfs_bifurcate_SubSmry_filesource_name'"
 		},
+		"LS_adlsg2edls_excel_Ques_Data_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_adlsg2edls_excel_Ques_Data'"
+		},
 		"LS_dbfs2_bifurcate_stu_sourcefilepath_accessToken": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'LS_dbfs2_bifurcate_stu_sourcefilepath'"
@@ -54,6 +58,10 @@
 		"LS_Dbfs_bifurcate_SubSmry_filesource_name_properties_typeProperties_existingClusterId": {
 			"type": "string",
 			"defaultValue": "1212-065554-24xhgg4x"
+		},
+		"LS_adlsg2edls_excel_Ques_Data_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsg2edls.dfs.core.windows.net/"
 		},
 		"LS_dbfs2_bifurcate_stu_sourcefilepath_properties_typeProperties_existingClusterId": {
 			"type": "string",
@@ -107,6 +115,9 @@
 					"LS_Dbfs_bifurcate_SubSmry_filesource_name_accessToken": {
 						"value": "[parameters('LS_Dbfs_bifurcate_SubSmry_filesource_name_accessToken')]"
 					},
+					"LS_adlsg2edls_excel_Ques_Data_accountKey": {
+						"value": "[parameters('LS_adlsg2edls_excel_Ques_Data_accountKey')]"
+					},
 					"LS_dbfs2_bifurcate_stu_sourcefilepath_accessToken": {
 						"value": "[parameters('LS_dbfs2_bifurcate_stu_sourcefilepath_accessToken')]"
 					},
@@ -134,6 +145,9 @@
 					"LS_Dbfs_bifurcate_SubSmry_filesource_name_properties_typeProperties_existingClusterId": {
 						"value": "[parameters('LS_Dbfs_bifurcate_SubSmry_filesource_name_properties_typeProperties_existingClusterId')]"
 					},
+					"LS_adlsg2edls_excel_Ques_Data_properties_typeProperties_url": {
+						"value": "[parameters('LS_adlsg2edls_excel_Ques_Data_properties_typeProperties_url')]"
+					},
 					"LS_dbfs2_bifurcate_stu_sourcefilepath_properties_typeProperties_existingClusterId": {
 						"value": "[parameters('LS_dbfs2_bifurcate_stu_sourcefilepath_properties_typeProperties_existingClusterId')]"
 					},
@@ -149,6 +163,26 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "adf-ats_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adf-ats_ArmTemplate_0')]"
+			]
 		}
 	]
 }

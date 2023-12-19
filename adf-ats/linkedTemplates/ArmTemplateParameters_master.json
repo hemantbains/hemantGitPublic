@@ -14,6 +14,9 @@
 		"LS_Dbfs_bifurcate_SubSmry_filesource_name_accessToken": {
 			"value": ""
 		},
+		"LS_adlsg2edls_excel_Ques_Data_accountKey": {
+			"value": ""
+		},
 		"LS_dbfs2_bifurcate_stu_sourcefilepath_accessToken": {
 			"value": ""
 		},
@@ -40,6 +43,9 @@
 		},
 		"LS_Dbfs_bifurcate_SubSmry_filesource_name_properties_typeProperties_existingClusterId": {
 			"value": "1212-065554-24xhgg4x"
+		},
+		"LS_adlsg2edls_excel_Ques_Data_properties_typeProperties_url": {
+			"value": "https://adlsg2edls.dfs.core.windows.net/"
 		},
 		"LS_dbfs2_bifurcate_stu_sourcefilepath_properties_typeProperties_existingClusterId": {
 			"value": "1212-065554-24xhgg4x"
