@@ -359,7 +359,7 @@
 										},
 										"inputs": [
 											{
-												"referenceName": "ds_source_Excel",
+												"referenceName": "ds_source_Excel_Student_info",
 												"type": "DatasetReference",
 												"parameters": {
 													"dspara_stuinfo_filepath": {
