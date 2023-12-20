@@ -616,7 +616,7 @@
 												"typeProperties": {
 													"notebookPath": "/Users/hemant@insightanalytics.us/Ats_Edls/Notebook_bifurcate_file_sourcename",
 													"baseParameters": {
-														"para_dbfs_activity_stu_filename": {
+														"para_dbfs_activity_Student_Info_filename": {
 															"value": "@variables('varStudent_Information filename')",
 															"type": "Expression"
 														}
@@ -755,10 +755,101 @@
 												}
 											},
 											{
-												"name": "Copy data_ Student Summary",
+												"name": "Copy data_ SubmisionSummary",
 												"type": "Copy",
-												"state": "Inactive",
-												"onInactiveMarkAs": "Succeeded",
+												"dependsOn": [
+													{
+														"activity": "setvar_pick_bifurcation_sub_smry_path",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													},
+													{
+														"activity": "setvar_pick_bifurcation_filename_subSmry",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "ExcelSource",
+														"additionalColumns": [
+															{
+																"name": "File_Source",
+																"value": {
+																	"value": "@variables('var_SubmissionSummary_filename')",
+																	"type": "Expression"
+																}
+															},
+															{
+																"name": "time_stamp",
+																"value": {
+																	"value": "@utcnow()",
+																	"type": "Expression"
+																}
+															}
+														],
+														"storeSettings": {
+															"type": "AzureBlobFSReadSettings",
+															"recursive": false,
+															"enablePartitionDiscovery": false
+														}
+													},
+													"sink": {
+														"type": "AzureSqlSink",
+														"preCopyScript": "if exists(Select * from sys.objects where object_id = OBJECT_ID('[AAOTA].[temp_Submission_Summary]') and type='U')\ndrop table [AAOTA].[temp_Submission_Summary]",
+														"writeBehavior": "insert",
+														"sqlWriterUseTableLock": false,
+														"tableOption": "autoCreate",
+														"disableMetricsCollection": false
+													},
+													"enableStaging": false,
+													"validateDataConsistency": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
+												},
+												"inputs": [
+													{
+														"referenceName": "ds_source_Excel_SubSmry",
+														"type": "DatasetReference",
+														"parameters": {
+															"dspara_SubSmry_filename": {
+																"value": "@variables('var_pick_bifurcation_filename_subSmry')",
+																"type": "Expression"
+															},
+															"dspara_SubSmry_filepath": {
+																"value": "@variables('var_pick_bifurcation_path_subSmry')",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "sink_ds_AzureSqlDb_SubSmry",
+														"type": "DatasetReference",
+														"parameters": {}
+													}
+												]
+											},
+											{
+												"name": "Notebook - bifurcate SubSmry Data filepath",
+												"type": "DatabricksNotebook",
 												"dependsOn": [
 													{
 														"activity": "ActSetVarSubmissionSummary_filename",
@@ -776,7 +867,116 @@
 												},
 												"userProperties": [],
 												"typeProperties": {
-													"enableStaging": false
+													"notebookPath": "/Users/hemant@insightanalytics.us/Ats_Edls/Notebook_bifurcate_Sub_Summary_file_sourcename",
+													"baseParameters": {
+														"para_dbfs_activity_sub_smry_filename": {
+															"value": "@variables('var_SubmissionSummary_filename')",
+															"type": "Expression"
+														}
+													}
+												},
+												"linkedServiceName": {
+													"referenceName": "LS_Dbfs_bifurcate_SubSmry_filesource_name",
+													"type": "LinkedServiceReference"
+												}
+											},
+											{
+												"name": "setvar_chk_birfurcation_dbfs_output_SubSmry",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "Notebook - bifurcate SubSmry Data filepath",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_chk_bifurcation_subSmry",
+													"value": {
+														"value": "@activity('Notebook - bifurcate SubSmry Data filepath').output.runOutput",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "setvar_pick_bifurcation_sub_smry_path",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "setvar_chk_birfurcation_dbfs_output_SubSmry",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_pick_bifurcation_path_subSmry",
+													"value": {
+														"value": "@variables('var_chk_bifurcation_subSmry')[0]",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "setvar_pick_bifurcation_filename_subSmry",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "setvar_chk_birfurcation_dbfs_output_SubSmry",
+														"dependencyConditions": [
+															"Completed"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_pick_bifurcation_filename_subSmry",
+													"value": {
+														"value": "@variables('var_chk_bifurcation_subSmry')[1]",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "SP_Insert Sub_Smry_temp into  Sub_Smry_Staging",
+												"type": "SqlServerStoredProcedure",
+												"dependsOn": [
+													{
+														"activity": "Copy data_ SubmisionSummary",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"storedProcedureName": "[[AAOTA].[Submission_Summary_temp_to_Staging_insert]"
+												},
+												"linkedServiceName": {
+													"referenceName": "sink_AzureSqlDb",
+													"type": "LinkedServiceReference"
 												}
 											}
 										]
@@ -810,7 +1010,7 @@
 												},
 												"userProperties": [],
 												"typeProperties": {
-													"variableName": "var_SubmissionSubmission_filename",
+													"variableName": "var_StudentSubmission_filename",
 													"value": {
 														"value": "@variables('varForEachDbfsItem')",
 														"type": "Expression"
@@ -818,10 +1018,97 @@
 												}
 											},
 											{
-												"name": "Copy data_ Student Submission",
+												"name": "Copy_data_Student_Submission",
 												"type": "Copy",
-												"state": "Inactive",
-												"onInactiveMarkAs": "Succeeded",
+												"dependsOn": [
+													{
+														"activity": "setvar_pick_bifur_path_stuSubmission",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													},
+													{
+														"activity": "setvar_pick_bifurcation_filename_stuSubmission",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "ExcelSource",
+														"additionalColumns": [
+															{
+																"name": "File_Source",
+																"value": {
+																	"value": "@variables('var_StudentSubmission_filename')",
+																	"type": "Expression"
+																}
+															},
+															{
+																"name": "time_stamp",
+																"value": {
+																	"value": "@utcnow()",
+																	"type": "Expression"
+																}
+															}
+														],
+														"storeSettings": {
+															"type": "AzureBlobFSReadSettings",
+															"recursive": false,
+															"enablePartitionDiscovery": false
+														}
+													},
+													"sink": {
+														"type": "AzureSqlSink",
+														"writeBehavior": "insert",
+														"sqlWriterUseTableLock": false
+													},
+													"enableStaging": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
+												},
+												"inputs": [
+													{
+														"referenceName": "ds_source_Excel_Student_Submission",
+														"type": "DatasetReference",
+														"parameters": {
+															"dspara_stuSub_filepath": {
+																"value": "@variables('var_pick_bifur_path_stuSubmission')",
+																"type": "Expression"
+															},
+															"dspara_stuSub_filename": {
+																"value": "@variables('var_pick_bifurcation_filename_stuSubmission')",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "sink_AzureSqlDb_StuSubmission",
+														"type": "DatasetReference",
+														"parameters": {}
+													}
+												]
+											},
+											{
+												"name": "Notebook_bifurcate_Student_Submissions_file_sourcename",
+												"type": "DatabricksNotebook",
 												"dependsOn": [
 													{
 														"activity": "ActSetVarStudentSubmission",
@@ -839,7 +1126,89 @@
 												},
 												"userProperties": [],
 												"typeProperties": {
-													"enableStaging": false
+													"notebookPath": "/Users/hemant@insightanalytics.us/Ats_Edls/Notebook_bifurcate_Student_Submissions_file_sourcename",
+													"baseParameters": {
+														"para_dbfs_activity_Student_Submissions_filename": {
+															"value": "@variables('var_StudentSubmission_filename')",
+															"type": "Expression"
+														}
+													}
+												},
+												"linkedServiceName": {
+													"referenceName": "LS_Dbfs_bifurcate_SubSmry_filesource_name",
+													"type": "LinkedServiceReference"
+												}
+											},
+											{
+												"name": "setvar_chk_dbfs_bifur_StuSubmission",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "Notebook_bifurcate_Student_Submissions_file_sourcename",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_chk_dbfs_bifur_StuSubmission",
+													"value": {
+														"value": "@activity('Notebook_bifurcate_Student_Submissions_file_sourcename').output.runOutput",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "setvar_pick_bifur_path_stuSubmission",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "setvar_chk_dbfs_bifur_StuSubmission",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_pick_bifur_path_stuSubmission",
+													"value": {
+														"value": "@variables('var_chk_dbfs_bifur_StuSubmission')[0]",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "setvar_pick_bifurcation_filename_stuSubmission",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "setvar_chk_dbfs_bifur_StuSubmission",
+														"dependencyConditions": [
+															"Completed"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_pick_bifurcation_filename_stuSubmission",
+													"value": {
+														"value": "@variables('var_chk_dbfs_bifur_StuSubmission')[1]",
+														"type": "Expression"
+													}
 												}
 											}
 										]
@@ -881,10 +1250,97 @@
 												}
 											},
 											{
-												"name": "Copy data - Question Data",
+												"name": "Copy_data_Ques_Data",
 												"type": "Copy",
-												"state": "Inactive",
-												"onInactiveMarkAs": "Succeeded",
+												"dependsOn": [
+													{
+														"activity": "setvar_pick_bifur_path_Ques_Data",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													},
+													{
+														"activity": "setvar_pick_bifurcation_filename_Ques_Data",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "ExcelSource",
+														"additionalColumns": [
+															{
+																"name": "File_Source",
+																"value": {
+																	"value": "@variables('var_Questionsdata_filename')",
+																	"type": "Expression"
+																}
+															},
+															{
+																"name": "time_stamp",
+																"value": {
+																	"value": "@utcnow()",
+																	"type": "Expression"
+																}
+															}
+														],
+														"storeSettings": {
+															"type": "AzureBlobFSReadSettings",
+															"recursive": false,
+															"enablePartitionDiscovery": false
+														}
+													},
+													"sink": {
+														"type": "AzureSqlSink",
+														"writeBehavior": "insert",
+														"sqlWriterUseTableLock": false
+													},
+													"enableStaging": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
+												},
+												"inputs": [
+													{
+														"referenceName": "ds_source_Excel_Ques_Data",
+														"type": "DatasetReference",
+														"parameters": {
+															"dspara_Ques_Data_filepath": {
+																"value": "@variables('var_pick_bifur_path_Ques_Data')",
+																"type": "Expression"
+															},
+															"dspara_Ques_Data_filename": {
+																"value": "@variables('var_pick_bifurcation_filename_Ques_Data')",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "sink_ds_AzureSqlDb_Ques_Data",
+														"type": "DatasetReference",
+														"parameters": {}
+													}
+												]
+											},
+											{
+												"name": "Notebook_bifurcate_Ques_Data_file_sourcename",
+												"type": "DatabricksNotebook",
 												"dependsOn": [
 													{
 														"activity": "ActSetVarQuestionsdata_file",
@@ -902,7 +1358,89 @@
 												},
 												"userProperties": [],
 												"typeProperties": {
-													"enableStaging": false
+													"notebookPath": "/Users/hemant@insightanalytics.us/Ats_Edls/Notebook_bifurcate_Questions_Data_file_sourcename",
+													"baseParameters": {
+														"para_dbfs_activity_Ques_Data_filename": {
+															"value": "@variables('var_Questionsdata_filename')",
+															"type": "Expression"
+														}
+													}
+												},
+												"linkedServiceName": {
+													"referenceName": "LS_Dbfs_bifurcate_SubSmry_filesource_name",
+													"type": "LinkedServiceReference"
+												}
+											},
+											{
+												"name": "setvar_chk_dbfs_bifur_Ques_Data",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "Notebook_bifurcate_Ques_Data_file_sourcename",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_chk_dbfs_bifur_Ques_Data",
+													"value": {
+														"value": "@activity('Notebook_bifurcate_Ques_Data_file_sourcename').output.runOutput",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "setvar_pick_bifur_path_Ques_Data",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "setvar_chk_dbfs_bifur_Ques_Data",
+														"dependencyConditions": [
+															"Succeeded"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_pick_bifur_path_Ques_Data",
+													"value": {
+														"value": "@variables('var_chk_dbfs_bifur_Ques_Data')[0]",
+														"type": "Expression"
+													}
+												}
+											},
+											{
+												"name": "setvar_pick_bifurcation_filename_Ques_Data",
+												"type": "SetVariable",
+												"dependsOn": [
+													{
+														"activity": "setvar_chk_dbfs_bifur_Ques_Data",
+														"dependencyConditions": [
+															"Completed"
+														]
+													}
+												],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "var_pick_bifurcation_filename_Ques_Data",
+													"value": {
+														"value": "@variables('var_chk_dbfs_bifur_Ques_Data')[1]",
+														"type": "Expression"
+													}
 												}
 											}
 										]
@@ -940,9 +1478,6 @@
 					"var_SubmissionSummary_filename": {
 						"type": "String"
 					},
-					"var_SubmissionSubmission_filename": {
-						"type": "String"
-					},
 					"var_Questionsdata_filename": {
 						"type": "String"
 					},
@@ -966,6 +1501,36 @@
 					},
 					"var_pick_bifurcation_filename": {
 						"type": "String"
+					},
+					"var_chk_bifurcation_subSmry": {
+						"type": "Array"
+					},
+					"var_pick_bifurcation_filename_subSmry": {
+						"type": "String"
+					},
+					"var_pick_bifurcation_path_subSmry": {
+						"type": "String"
+					},
+					"var_StudentSubmission_filename": {
+						"type": "String"
+					},
+					"var_chk_dbfs_bifur_StuSubmission": {
+						"type": "Array"
+					},
+					"var_pick_bifur_path_stuSubmission": {
+						"type": "String"
+					},
+					"var_pick_bifurcation_filename_stuSubmission": {
+						"type": "String"
+					},
+					"var_chk_dbfs_bifur_Ques_Data": {
+						"type": "Array"
+					},
+					"var_pick_bifurcation_filename_Ques_Data": {
+						"type": "String"
+					},
+					"var_pick_bifur_path_Ques_Data": {
+						"type": "String"
 					}
 				},
 				"folder": {
@@ -977,7 +1542,15 @@
 				"[concat(variables('factoryId'), '/linkedServices/LS_AzureDatabricks1')]",
 				"[concat(variables('factoryId'), '/datasets/ds_source_Excel_Student_info')]",
 				"[concat(variables('factoryId'), '/datasets/AzureSqldb_Student_Info')]",
-				"[concat(variables('factoryId'), '/linkedServices/LS_dbfs2_bifurcate_stu_sourcefilepath')]"
+				"[concat(variables('factoryId'), '/linkedServices/LS_dbfs2_bifurcate_stu_sourcefilepath')]",
+				"[concat(variables('factoryId'), '/datasets/ds_source_Excel_SubSmry')]",
+				"[concat(variables('factoryId'), '/datasets/sink_ds_AzureSqlDb_SubSmry')]",
+				"[concat(variables('factoryId'), '/linkedServices/LS_Dbfs_bifurcate_SubSmry_filesource_name')]",
+				"[concat(variables('factoryId'), '/linkedServices/sink_AzureSqlDb')]",
+				"[concat(variables('factoryId'), '/datasets/ds_source_Excel_Student_Submission')]",
+				"[concat(variables('factoryId'), '/datasets/sink_AzureSqlDb_StuSubmission')]",
+				"[concat(variables('factoryId'), '/datasets/ds_source_Excel_Ques_Data')]",
+				"[concat(variables('factoryId'), '/datasets/sink_ds_AzureSqlDb_Ques_Data')]"
 			]
 		},
 		{
