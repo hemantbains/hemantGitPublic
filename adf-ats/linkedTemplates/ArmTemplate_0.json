@@ -521,7 +521,7 @@
 						},
 						"fileSystem": "edls-input"
 					},
-					"range": "A1:R1000",
+					"range": "",
 					"firstRowAsHeader": true
 				},
 				"schema": []
@@ -998,97 +998,10 @@
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "Item_ID",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Item_Name",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Question_ID",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Associated_Question_ID",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Total_Points",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Question_Type",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Question",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Position_Number",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Sub_Question",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Answer_Option",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Answer_Breakdown",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Answer_Breakdown_1",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Correct_Answer",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Correctly_Answered",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Most_Points_Earned",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Least_Points_Earned",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Average_Points_Earned",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Standards",
-						"type": "nvarchar"
-					},
-					{
-						"name": "File_Source",
-						"type": "nvarchar"
-					},
-					{
-						"name": "time_stamp",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "TIMESTAMP",
-						"type": "timestamp"
-					}
-				],
+				"schema": [],
 				"typeProperties": {
 					"schema": "AAOTA",
-					"table": "Questions_Data_Staging"
+					"table": "temp_Questions_Data"
 				}
 			},
 			"dependsOn": [
