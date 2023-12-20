@@ -2645,6 +2645,7 @@
 													},
 													"sink": {
 														"type": "AzureSqlSink",
+														"preCopyScript": "if exists(Select * from sys.objects where object_id = OBJECT_ID('[AAOTA].[temp_Questions_Data]') and type='U')\ndrop table [AAOTA].[temp_Questions_Data]",
 														"writeBehavior": "insert",
 														"sqlWriterUseTableLock": true,
 														"tableOption": "autoCreate",
