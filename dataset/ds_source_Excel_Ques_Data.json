@@ -31,7 +31,7 @@
 				},
 				"fileSystem": "edls-input"
 			},
-			"range": "A1:R1000",
+			"range": "",
 			"firstRowAsHeader": true
 		},
 		"schema": []
