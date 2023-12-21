@@ -1068,13 +1068,6 @@
 															"value": "@variables('var_Questionsdata_filename')",
 															"type": "Expression"
 														}
-													},
-													{
-														"name": "time_stamp",
-														"value": {
-															"value": "@utcnow()",
-															"type": "Expression"
-														}
 													}
 												],
 												"storeSettings": {
