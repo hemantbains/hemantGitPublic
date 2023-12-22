@@ -30,7 +30,8 @@
 				"fileSystem": "edls-input"
 			},
 			"range": "",
-			"firstRowAsHeader": true
+			"firstRowAsHeader": true,
+			"nullValue": "null"
 		},
 		"schema": [
 			{
