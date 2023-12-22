@@ -68,6 +68,8 @@
 						{
 							"name": "If Condition Student Information",
 							"type": "IfCondition",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
 									"activity": "SetvarfromActForEach",
@@ -757,7 +759,7 @@
 										},
 										"userProperties": [],
 										"typeProperties": {
-											"storedProcedureName": "[AAOTA].[Submission_Summary_temp_to_Staging_insert]"
+											"storedProcedureName": "[AAOTA].[SP_Submission_Summary_temp_to_Staging_insert]"
 										},
 										"linkedServiceName": {
 											"referenceName": "sink_AzureSqlDb",
@@ -770,6 +772,8 @@
 						{
 							"name": "If Condition to load file Student Submission",
 							"type": "IfCondition",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
 									"activity": "SetvarfromActForEach",
@@ -1001,6 +1005,8 @@
 						{
 							"name": "If Condition to load Questions data",
 							"type": "IfCondition",
+							"state": "Inactive",
+							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [
 								{
 									"activity": "SetvarfromActForEach",
